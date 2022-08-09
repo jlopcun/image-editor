@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jlopcuns">
+    <meta name="keywords" content="editor image jlopcun jlopcuns html css javascript sass">
+    <meta name="description" content="editor de imágenes hecho por Jlopcuns con html css sass y javascript">
+    <link rel="stylesheet" href="public/styles/styles.css">
+    <title>Image editor</title>
+</head>
+<body>
+    <div class="getFile">
+        <label for="fileGetter" class="getFile__label" tabindex="0" aria-label="choose a file" role="button">Choose a file</label>
+        <input type="file"  id="fileGetter" class="getFile__input">
+    </div>
+    <article class="imageEditor">
+        <ul class="filterMenu" id="filterChoose">
+            <li class="filterMenu__filter">glitch</li>
+            <li class="filterMenu__filter">grayscale</li>
+            <li class="filterMenu__filter">blue</li>
+            <li class="filterMenu__filter">blur</li>
+            <li class="filterMenu__filter">pale</li>
+            <li class="filterMenu__filter">crash</li>
+            <li class="filterMenu__filter">restore</li>
+            <li class="filterMenu__filter">clear</li>
+        </ul>
+        <canvas class="editedImage" id="editedImage">
+        </canvas>
+        <a download id="imageDownloadLink" class="imageEditor__download">Download the image</a>
+        <img id="imageToEdit" alt="selected image" hidden>
+    </article>
+    <script src="//cdn.jsdelivr.net/npm/ramda@latest/dist/ramda.min.js"></script>
+    <script src="public/scripts/helpers.js"></script>
+    <script src="public/scripts/main.js"></script>
+</body>
+</html>
