@@ -11,10 +11,7 @@
     <title>Image editor</title>
 </head>
 <body>
-    <div class="getFile">
-        <label for="fileGetter" class="getFile__label" tabindex="0" aria-label="choose a file" role="button">Choose a file</label>
-        <input type="file"  id="fileGetter" class="getFile__input">
-    </div>
+    
     <article class="imageEditor">
         <ul class="filterMenu" id="filterChoose">
             <li class="filterMenu__filter">glitch</li>
@@ -27,6 +24,10 @@
             <li class="filterMenu__filter">clear</li>
         </ul>
             <div class="canvasContainer">
+                <div class="getFile" id="file">
+                    <label for="fileGetter" class="getFile__label" tabindex="0" aria-label="choose a file" role="button">Choose a file</label>
+                    <input type="file"  id="fileGetter" class="getFile__input">
+                </div>
                 <canvas class="editedImage" id="editedImage">
                 </canvas>
             </div>

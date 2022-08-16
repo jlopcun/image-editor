@@ -20,19 +20,14 @@ ul
     margin: 0
 %rounded
     border-radius: 10px
-.getFile
-    width:100%
-    padding:2rem
-    &__label
-        @extend %rounded
-        padding:1rem 2rem
-    &__input
-        display: none
 
+.hidden
+    visibility: hidden
 
 .imageEditor
     @include mix.flex(row,wrap,center,flex-start)
     font-family: Arial, Helvetica, sans-serif
+    margin-top: 5rem
     &__download
         flex-basis:100%
         align-self: flex-end
@@ -45,12 +40,31 @@ $mainInterfaceSize : min(25rem,100vw)
 $interfaceBg:#333
 $highlighted:#5fb
 .canvasContainer
+    position: relative
     @include mix.flex(row,wrap,center,center)
-    width:$mainInterfaceSize
-    height:$mainInterfaceSize
+    width:25rem
+    height:25rem
     border: 5px solid $highlighted
     overflow: hidden
     background-color: $interfaceBg
+
+.getFile
+    @include mix.flex(column,wrap,center,center)
+    @extend %rounded
+    width:10rem
+    height:2rem
+    position: absolute
+    top:50%
+    left:50%
+    transform: translateX(-50%) translateY(-50%)
+    background-color: #aaa
+    
+    &__label
+        @extend %rounded
+        padding:1rem 2rem
+    &__input
+        display: none
+
 .editedImage
     display: block
     width: var(--canvasWidth)
@@ -89,3 +103,4 @@ $highlighted:#5fb
     height:200px
     border: 1px solid blue
     background-color: var(--actualPixelColor)
+

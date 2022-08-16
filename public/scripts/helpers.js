@@ -19,7 +19,8 @@ const on = function(eventType,cb,element){
 const setRoot = (varName,varValue) =>{
     document.documentElement.style.setProperty(varName,varValue)
 }
-
+const hide = el => el.classList.add('hidden') 
+const show = el => el.classList.remove('hidden')
 // CANVAS RELATED METHODS AND OBJECTS
 const clearCanvas = canvas => canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
 const drawImage = (canvas,HTMLimage) => canvas.ctx.drawImage(HTMLimage,0,0,canvas.width,canvas.height)
@@ -56,6 +57,7 @@ const setImage = function(file,canvas,filter){
             setRoot('--canvasHeight',`${resize(img.width,img.height,400)[1]}px`)
             filter?setFilter(filter,canvas.ctx.getImageData(0,0,canvas.width,canvas.height),canvas):""
             setDownloadLink(canvas,'imageDownloadLink')
+            hide(I('file'))
         },img)
     },reader)
 }
@@ -146,6 +148,7 @@ const filters = {
         clearCanvas(canvas)
         drawImage(canvas,I('imageToEdit'))
         setDownloadLink(canvas,'imageDownloadLink')
+       
     },
     "border":(imageData,canvas)=>{
         for(let i=0;i<imageData.data.length;i+=4){
@@ -157,6 +160,7 @@ const filters = {
     'clear':(imageData,canvas)=>{
         clearCanvas(canvas)
         I('imageDownloadLink').removeAttribute('href')
+        show(I('file'))
     },
     "crash":(imageData,canvas)=>{
         for(let i=0;i<imageData.data.length;i+=4){
