@@ -1,8 +1,7 @@
 'use strict'
 
 
-const app = function(canvas,file,filter){
-
+const app = function(canvas,file){
     on('change',(e)=>{
         setImage(e.target.files[0],newCanvas(canvas)) 
     },file)
@@ -13,10 +12,10 @@ const app = function(canvas,file,filter){
         setFilter(e.target.textContent,canvasObj.imageData,canvasObj)
     },I('filterChoose'))
 
-    on('mousemove',(e)=>{
-        const canvasObj = newCanvas(I('editedImage'))
-        getPixelColors(canvasObj.X(e.pageX),canvasObj.Y(e.pageY),canvasObj)
-    },canvas)
+    // on('mousemove',(e)=>{
+    //     const canvasObj = newCanvas(I('editedImage'))
+    //     getPixelColors(canvasObj.X(e.pageX),canvasObj.Y(e.pageY),canvasObj)
+    // },canvas)
 }
 
 app(I('editedImage'),I('fileGetter'))

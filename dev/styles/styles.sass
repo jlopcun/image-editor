@@ -2,6 +2,8 @@
 
 :root
     --actualPixelColor:#000
+    --canvasWidth:$mainInterfaceSize
+    --canvasHeight:$mainInterfaceSize
 
 *,*::after,*::before
     box-sizing: border-box
@@ -40,22 +42,30 @@ ul
         &::selection
             display: none
 $mainInterfaceSize : min(25rem,100vw)
+$interfaceBg:#333
+$highlighted:#5fb
+.canvasContainer
+    @include mix.flex(row,wrap,center,center)
+    width:$mainInterfaceSize
+    height:$mainInterfaceSize
+    border: 5px solid $highlighted
+    overflow: hidden
+    background-color: $interfaceBg
 .editedImage
     display: block
-    width: $mainInterfaceSize
-    height: $mainInterfaceSize
-    border: 1px solid black
+    width: var(--canvasWidth)
+    height: var(--canvasHeight)
+    
     
 .filterMenu
-    $bg:#333
-    background-color: $bg
+    background-color: $interfaceBg
     @include mix.flex(column,wrap,flex-start,center)
     width: $mainInterfaceSize
     height: $mainInterfaceSize
     &__filter
         $font-size:1em
         $border:2px solid #fff
-        background-color: $bg
+        background-color: $interfaceBg
         width:100%
         height:2.5rem
         padding:
@@ -72,7 +82,7 @@ $mainInterfaceSize : min(25rem,100vw)
         &:hover
             font-size: $font-size * .95
             opacity: .8
-            color: #5fb
+            color: $highlighted
     
 .pixelColor
     width:200px

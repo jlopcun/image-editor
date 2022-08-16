@@ -16,6 +16,10 @@ const on = function(eventType,cb,element){
     element.addEventListener(eventType,cb)
 }
 
+const setRoot = (varName,varValue) =>{
+    document.documentElement.style.setProperty(varName,varValue)
+}
+
 // CANVAS RELATED METHODS AND OBJECTS
 const clearCanvas = canvas => canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
 const drawImage = (canvas,HTMLimage) => canvas.ctx.drawImage(HTMLimage,0,0,canvas.width,canvas.height)
@@ -33,6 +37,11 @@ const newCanvas = (canvas)=>{
 const updateImageData = (imageData,canvas) => canvas.ctx.putImageData(imageData,0,0)
 const setDownloadLink = (canvas,linkId)=> I(linkId).href = canvas.ref.toDataURL()
 // IMAGE HELPER METHODS
+
+const resize = (width,height,limit) =>{
+    return width > limit?resize(width * .65,height *.65,limit):[width,height]
+}
+
 const setImage = function(file,canvas,filter){
     const reader = new FileReader()
 
@@ -43,6 +52,8 @@ const setImage = function(file,canvas,filter){
         on('load',()=>{
             clearCanvas(canvas)
             drawImage(canvas,img)
+            setRoot('--canvasWidth',`${resize(img.width,img.height,400)[0]}px`)
+            setRoot('--canvasHeight',`${resize(img.width,img.height,400)[1]}px`)
             filter?setFilter(filter,canvas.ctx.getImageData(0,0,canvas.width,canvas.height),canvas):""
             setDownloadLink(canvas,'imageDownloadLink')
         },img)
@@ -92,11 +103,11 @@ const newFilter = (imageData,canvasObject,colorChanges,conditional=false)=> {
 
 // const getPixelFromPosition = (x,y,width) => (x + (y) * width/2) * 4
 
-// const getPixelColors = (x,y,canvasObj) =>{
-//     const pixel = canvasObj.ctx.getImageData(x, y, 1, 1);
-//     const pixelData = pixel.data;
-//     document.documentElement.style.setProperty('--actualPixelColor',`rgba(${pixelData[0]},${pixelData[1]},${pixelData[2]},${pixelData[3]})`)
-// }
+const getPixelColors = (x,y,canvasObj) =>{
+    const pixel = canvasObj.ctx.getImageData(x, y, 1, 1);
+    const pixelData = pixel.data;
+    setRoot('--actualPixelColor',`rgba(${pixelData[0]},${pixelData[1]},${pixelData[2]},${pixelData[3]})`)
+}
 const filters = {
     'glitch':(imageData,canvas)=> newFilter(imageData,canvas,[0,255,0],()=>randomNum(1,10) > 6),
     'grayscale':(imageData,canvas)=>{

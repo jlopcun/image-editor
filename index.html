@@ -26,11 +26,15 @@
             <li class="filterMenu__filter">restore</li>
             <li class="filterMenu__filter">clear</li>
         </ul>
-        <canvas class="editedImage" id="editedImage">
-        </canvas>
+            <div class="canvasContainer">
+                <canvas class="editedImage" id="editedImage">
+                </canvas>
+            </div>
+
         <a download id="imageDownloadLink" class="imageEditor__download">Download the image</a>
-        <img id="imageToEdit" alt="selected image" hidden>
+        <img id="imageToEdit" alt="selected image" class="imageToEdit" hidden>
     </article>
+    <!-- <div class="pixelColor"></div> -->
     <script src="//cdn.jsdelivr.net/npm/ramda@latest/dist/ramda.min.js"></script>
     <script src="public/scripts/helpers.js"></script>
     <script src="public/scripts/main.js"></script>
