@@ -23,7 +23,7 @@ const hide = el => el.classList.add('hidden')
 const show = el => el.classList.remove('hidden')
 // CANVAS RELATED METHODS AND OBJECTS
 const clearCanvas = canvas => canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
-const drawImage = (canvas,HTMLimage) => canvas.ctx.drawImage(HTMLimage,0,0,canvas.width,canvas.height)
+const drawImage = (canvas,HTMLimage,w,h) => canvas.ctx.drawImage(HTMLimage,0,0,w,h)
 const newCanvas = (canvas)=>{
     return {
         ctx:canvas.getContext('2d'),
@@ -44,22 +44,23 @@ const resize = (width,height,limit) =>{
 }
 
 const setImage = function(file,canvas,filter){
-    const reader = new FileReader()
-
-    reader.readAsDataURL(file)
-
-    on('load',()=>{
-        const img = image(reader.result,'imageToEdit')
+        const src = URL.createObjectURL(file)
+        const img = image(src,'imageToEdit')
+        img.src = src
+        img.width = 400
+        img.height = 400
         on('load',()=>{
-            clearCanvas(canvas)
-            drawImage(canvas,img)
-            setRoot('--canvasWidth',`${resize(img.width,img.height,400)[0]}px`)
-            setRoot('--canvasHeight',`${resize(img.width,img.height,400)[1]}px`)
+
+            canvas.ref.width = img.width
+            canvas.ref.height = img.height
+            // canvas.ctx.canvas.width = img.width
+            // canvas.ctx.canvas.height = img.height
+            drawImage(canvas,img,img.width,img.height)
             filter?setFilter(filter,canvas.ctx.getImageData(0,0,canvas.width,canvas.height),canvas):""
             setDownloadLink(canvas,'imageDownloadLink')
             hide(I('file'))
         },img)
-    },reader)
+
 }
 
 
@@ -158,6 +159,7 @@ const filters = {
     'pale':(imageData,canvas)=> newFilter(imageData,canvas,[50,50,0],()=>true)
     ,
     'clear':(imageData,canvas)=>{
+        I('imageToEdit').src = ""
         clearCanvas(canvas)
         I('imageDownloadLink').removeAttribute('href')
         show(I('file'))
