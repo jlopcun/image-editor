@@ -12,10 +12,7 @@ const app = function(canvas,file){
         setFilter(e.target.textContent,canvasObj.imageData,canvasObj)
     },I('filterChoose'))
 
-    // on('mousemove',(e)=>{
-    //     const canvasObj = newCanvas(I('editedImage'))
-    //     getPixelColors(canvasObj.X(e.pageX),canvasObj.Y(e.pageY),canvasObj)
-    // },canvas)
+
 }
 
 app(I('editedImage'),I('fileGetter'))

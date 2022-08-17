@@ -23,7 +23,7 @@ const hide = el => el.classList.add('hidden')
 const show = el => el.classList.remove('hidden')
 // CANVAS RELATED METHODS AND OBJECTS
 const clearCanvas = canvas => canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
-const drawImage = (canvas,HTMLimage,w,h) => canvas.ctx.drawImage(HTMLimage,0,0,w,h)
+const drawImage = (canvas,HTMLimage,w,h) => canvas.ctx.drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
 const newCanvas = (canvas)=>{
     return {
         ctx:canvas.getContext('2d'),
@@ -43,19 +43,17 @@ const resize = (width,height,limit) =>{
     return width > limit?resize(width * .65,height *.65,limit):[width,height]
 }
 
-const setImage = function(file,canvas,filter){
-        const src = URL.createObjectURL(file)
-        const img = image(src,'imageToEdit')
-        img.src = src
-        img.width = 400
-        img.height = 400
-        on('load',()=>{
+const equalSizes = (sizeGetter,sizePut) =>{
+    sizePut.width = sizeGetter.width
+    sizePut.height = sizeGetter.height
+}
 
-            canvas.ref.width = img.width
-            canvas.ref.height = img.height
-            // canvas.ctx.canvas.width = img.width
-            // canvas.ctx.canvas.height = img.height
-            drawImage(canvas,img,img.width,img.height)
+const setImage = function(file,canvas,filter){
+        const img = image(URL.createObjectURL(file),'imageToEdit')
+ 
+        on('load',()=>{
+            equalSizes(img,canvas.ref)
+            drawImage(canvas,img)
             filter?setFilter(filter,canvas.ctx.getImageData(0,0,canvas.width,canvas.height),canvas):""
             setDownloadLink(canvas,'imageDownloadLink')
             hide(I('file'))
@@ -100,17 +98,7 @@ const newFilter = (imageData,canvasObject,colorChanges,conditional=false)=> {
     setDownloadLink(canvasObject,'imageDownloadLink')
 }
 
-// const pixelGetX = (redIndex,width) =>redIndex > width?pixelGetX(redIndex - width,width):redIndex
-// const pixelGetY = (redIndex,width,row=1) => redIndex > width ?pixelGetY(redIndex - width,width,row+1):row
-// const getPixelPosition = (redIndex,row) => [pixelGetX(redIndex,row),pixelGetY(redIndex,row)]
 
-// const getPixelFromPosition = (x,y,width) => (x + (y) * width/2) * 4
-
-const getPixelColors = (x,y,canvasObj) =>{
-    const pixel = canvasObj.ctx.getImageData(x, y, 1, 1);
-    const pixelData = pixel.data;
-    setRoot('--actualPixelColor',`rgba(${pixelData[0]},${pixelData[1]},${pixelData[2]},${pixelData[3]})`)
-}
 const filters = {
     'glitch':(imageData,canvas)=> newFilter(imageData,canvas,[0,255,0],()=>randomNum(1,10) > 6),
     'grayscale':(imageData,canvas)=>{
@@ -130,9 +118,7 @@ const filters = {
             setDownloadLink(canvas,'imageDownloadLink')
     },
     'blue':(imageData,canvas)=>{
-        // TESTING
         newFilter(imageData,canvas,[-50,-50,+50],()=>true)
-        console.log(imageData)
     }
     ,
     'blur':(imageData,canvas)=>{
@@ -142,6 +128,7 @@ const filters = {
             imageData.data[i + 1] = imageData.data[newIndex + 1]
             imageData.data[i + 2] = imageData.data[newIndex + 2] 
         }
+
         updateImageData(imageData,canvas)
         setDownloadLink(canvas,'imageDownloadLink')
     },
@@ -150,11 +137,6 @@ const filters = {
         drawImage(canvas,I('imageToEdit'))
         setDownloadLink(canvas,'imageDownloadLink')
        
-    },
-    "border":(imageData,canvas)=>{
-        for(let i=0;i<imageData.data.length;i+=4){
-            
-        }
     },
     'pale':(imageData,canvas)=> newFilter(imageData,canvas,[50,50,0],()=>true)
     ,
