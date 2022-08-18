@@ -3,15 +3,18 @@
 
 const app = function(canvas,file){
     on('change',(e)=>{
-        setImage(e.target.files[0],newCanvas(canvas)) 
+        hide(I('file'))
+        show(I('loader'))
+        setImage(e.target.files[0],newCanvas(canvas),hide)
     },file)
 
     on('click',(e)=>{
         if(e.target===e.currentTarget) return
         const canvasObj = newCanvas(I('editedImage'))
-        setFilter(e.target.textContent,canvasObj.imageData,canvasObj)
-    },I('filterChoose'))
+        show(I('loader'))
+        setFilter(e.target.textContent,canvasObj.imageData,canvasObj,hide)
 
+    },I('filterChoose'))
 
 }
 

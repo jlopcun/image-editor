@@ -19,8 +19,8 @@ const on = function(eventType,cb,element){
 const setRoot = (varName,varValue) =>{
     document.documentElement.style.setProperty(varName,varValue)
 }
-const hide = el => el.classList.add('hidden') 
-const show = el => el.classList.remove('hidden')
+const hide = el =>{ if(!el.classList.contains('hidden')) el.classList.add('hidden')}
+const show = el => {if(el.classList.contains('hidden')) el.classList.remove('hidden')}
 // CANVAS RELATED METHODS AND OBJECTS
 const clearCanvas = canvas => canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
 const drawImage = (canvas,HTMLimage,w,h) => canvas.ctx.drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
@@ -48,38 +48,42 @@ const equalSizes = (sizeGetter,sizePut) =>{
     sizePut.height = sizeGetter.height
 }
 
-const setImage = function(file,canvas,filter){
+const setImage = function(file,canvas,callback){
         const img = image(URL.createObjectURL(file),'imageToEdit')
- 
         on('load',()=>{
             equalSizes(img,canvas.ref)
             drawImage(canvas,img)
-            filter?setFilter(filter,canvas.ctx.getImageData(0,0,canvas.width,canvas.height),canvas):""
             setDownloadLink(canvas,'imageDownloadLink')
-            hide(I('file'))
+            callback(I('loader'))
         },img)
-
+        
 }
 
 
 
 // FILTER METHODS AND OBJECTS
-const setFilter = (filter,imageData,canvas)=>{
+const setFilter = (filter,imageData,canvas,callback)=>{
     filters[filter](imageData,canvas)
+
+    callback(I('loader'))
+
+    
 }
 
-const setDifferentColors = (pixels,colorChanges,conditional) =>{
+const setDifferentColors = (pixels,colorChanges,conditional,cb) =>{
     for(let i=0;i< pixels.length;i+=4){
         if(conditional()){
             pixels[i] += colorChanges[0]
             pixels[i+1] += colorChanges[1]
             pixels[i+2] += colorChanges[2]
+            
         }
+        
     }
     
 }
 
-const setSameColor = (pixels,colorChanges,conditional)=>{
+const setSameColor = (pixels,colorChanges,conditional,cb)=>{
     for(let i=0;i< pixels.length;i+=4){
         if(conditional()){
             pixels[i] += colorChanges
@@ -113,9 +117,11 @@ const filters = {
                     imageData.data[i + 1] = imageData.data[i + 1] - 70
                     imageData.data[i + 2] = imageData.data[i + 2] - 70
                 }
+
             }
             updateImageData(imageData,canvas)
             setDownloadLink(canvas,'imageDownloadLink')
+            
     },
     'blue':(imageData,canvas)=>{
         newFilter(imageData,canvas,[-50,-50,+50],()=>true)
@@ -127,6 +133,7 @@ const filters = {
             imageData.data[i] = imageData.data[newIndex]
             imageData.data[i + 1] = imageData.data[newIndex + 1]
             imageData.data[i + 2] = imageData.data[newIndex + 2] 
+
         }
 
         updateImageData(imageData,canvas)
