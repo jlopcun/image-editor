@@ -22,8 +22,11 @@ const setRoot = (varName,varValue) =>{
 const hide = el => el.classList.add('hidden')
 const show = el => el.classList.remove('hidden')
 // CANVAS RELATED METHODS AND OBJECTS
-const clearCanvas = canvas => canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
-const drawImage = (canvas,HTMLimage,w,h) => canvas.ctx.drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
+const clearCanvas = canvas =>{
+    canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
+    canvas.ctx.filter = "none"
+}
+const drawImage = (canvas,HTMLimage) => canvas.ctx.drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
 const newCanvas = (canvas)=>{
     return {
         ctx:canvas.getContext('2d'),
@@ -35,7 +38,10 @@ const newCanvas = (canvas)=>{
         Y:(pageY)=>parseInt(Math.abs(pageY - canvas.getBoundingClientRect().top))
     }
 }
-const updateImageData = (imageData,canvas) => canvas.ctx.putImageData(imageData,0,0)
+const updateImageData = (imageData,canvas) =>{
+    canvas.ctx.putImageData(imageData,0,0)
+    drawImage(canvas,canvas.ref)
+}
 const setDownloadLink = (canvas,linkId)=> I(linkId).href = canvas.ref.toDataURL()
 // IMAGE HELPER METHODS
 
@@ -52,6 +58,7 @@ const setImage = function(file,canvas,callback){
         const img = image(URL.createObjectURL(file),'imageToEdit')
         on('load',()=>{
             equalSizes(img,canvas.ref)
+            
             drawImage(canvas,img)
             setDownloadLink(canvas,'imageDownloadLink')
             callback(I('loader'))
@@ -128,13 +135,7 @@ const filters = {
     }
     ,
     'blur':(imageData,canvas)=>{
-        for(let i=0;i<imageData.data.length;i+=4){
-            const newIndex = randomNum(1,10) > 5?i + 4 * randomNum(-1,4) :i
-            imageData.data[i] = imageData.data[newIndex]
-            imageData.data[i + 1] = imageData.data[newIndex + 1]
-            imageData.data[i + 2] = imageData.data[newIndex + 2] 
-
-        }
+        canvas.ctx.filter = `blur(${canvas.width / 150 + canvas.height / 150}px)`
 
         updateImageData(imageData,canvas)
         setDownloadLink(canvas,'imageDownloadLink')
