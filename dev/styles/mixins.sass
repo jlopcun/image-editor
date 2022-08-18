@@ -9,4 +9,18 @@
     top:50%
     left:50%
     transform: translateX(-50%) translateY(-50%) 
+@mixin button($width,$padding)
+    width: $width
+    height: calc($width / 3)
+    padding: calc($padding / 2) $padding
+
+@mixin neumorphism($background) 
+  $highlight: lighten($background, 4%)
+  $lowlight: darken($background, 4%)
+  $shadowhigh: lighten($background, 9%)
+  $shadowlow: darken($background, 9%)
+
+  background: linear-gradient(145deg, $highlight, $lowlight)
+  box-shadow: 2em 2em 4em $shadowlow, -2em -2em 4em $shadowhigh
+
 
