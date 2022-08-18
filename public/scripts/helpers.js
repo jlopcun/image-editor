@@ -19,8 +19,8 @@ const on = function(eventType,cb,element){
 const setRoot = (varName,varValue) =>{
     document.documentElement.style.setProperty(varName,varValue)
 }
-const hide = el =>{ if(!el.classList.contains('hidden')) el.classList.add('hidden')}
-const show = el => {if(el.classList.contains('hidden')) el.classList.remove('hidden')}
+const hide = el => el.classList.add('hidden')
+const show = el => el.classList.remove('hidden')
 // CANVAS RELATED METHODS AND OBJECTS
 const clearCanvas = canvas => canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
 const drawImage = (canvas,HTMLimage,w,h) => canvas.ctx.drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
