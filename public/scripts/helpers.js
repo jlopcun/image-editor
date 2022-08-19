@@ -19,6 +19,15 @@ const on = function(eventType,cb,element){
 const setRoot = (varName,varValue) =>{
     document.documentElement.style.setProperty(varName,varValue)
 }
+
+const getRoot = (varName) =>{
+    return window.getComputedStyle(document.body).getPropertyValue(varName)
+}
+
+const changeTextContent = (el,text) =>{
+    el.textContent = text
+}
+
 const hide = el => el.classList.add('hidden')
 const show = el => el.classList.remove('hidden')
 // CANVAS RELATED METHODS AND OBJECTS
@@ -55,6 +64,8 @@ const equalSizes = (sizeGetter,sizePut) =>{
 }
 
 const setImage = function(file,canvas,callback){
+        hide(I('file'))
+        show(I('loader'))
         const img = image(URL.createObjectURL(file),'imageToEdit')
         on('load',()=>{
             equalSizes(img,canvas.ref)
@@ -119,7 +130,7 @@ const filters = {
                     imageData.data[i + 1],
                     imageData.data[i + 2]
                 ]
-                if(!colors.every(color=>color<100)){
+                if(colors.reduce((ant,act)=>ant+act)>=128){
                     imageData.data[i] = imageData.data[i] - 70
                     imageData.data[i + 1] = imageData.data[i + 1] - 70
                     imageData.data[i + 2] = imageData.data[i + 2] - 70
@@ -167,3 +178,28 @@ const filters = {
 }
 
 
+// FILE METHODS
+const resetDragDropDefaults = () =>{
+    on('dragover',(e)=>{
+        e.preventDefault()
+    },window)
+    on('drop',(e)=>{
+        e.preventDefault()
+    },window)
+}
+
+const checkFileType = (file,type) =>{
+    return file.type.includes(type)
+}
+
+
+const expectedDropFileValidation = () =>{
+    setRoot('--canvasContainerBg',getRoot('--fulfilledBg'))
+    changeTextContent(I('dropmessage'),'drop it!!!')
+
+}
+
+const unexpectedDropFileValidation = () =>{
+    setRoot('--canvasContainerBg',getRoot('--errBg'))
+    changeTextContent(I('dropmessage'),'only can accept image files')
+}
