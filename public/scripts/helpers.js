@@ -30,7 +30,17 @@ const changeTextContent = (el,text) =>{
 
 const hide = el => el.classList.add('hidden')
 const show = el => el.classList.remove('hidden')
+
+function hideLoader(){
+    hide(I('loader'))
+}
 // CANVAS RELATED METHODS AND OBJECTS
+
+const isCanvasEmpty = canvasObj =>{
+    return canvasObj.imageData.data.reduce((prev,act)=>prev+act) === 0
+}
+
+
 const clearCanvas = canvas =>{
     canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
     canvas.ctx.filter = "none"
@@ -54,9 +64,7 @@ const updateImageData = (imageData,canvas) =>{
 const setDownloadLink = (canvas,linkId)=> I(linkId).href = canvas.ref.toDataURL()
 // IMAGE HELPER METHODS
 
-const resize = (width,height,limit) =>{
-    return width > limit?resize(width * .65,height *.65,limit):[width,height]
-}
+
 
 const equalSizes = (sizeGetter,sizePut) =>{
     sizePut.width = sizeGetter.width
@@ -72,7 +80,7 @@ const setImage = function(file,canvas,callback){
             
             drawImage(canvas,img)
             setDownloadLink(canvas,'imageDownloadLink')
-            callback(I('loader'))
+            callback()
         },img)
         
 }
@@ -202,4 +210,9 @@ const expectedDropFileValidation = () =>{
 const unexpectedDropFileValidation = () =>{
     setRoot('--canvasContainerBg',getRoot('--errBg'))
     changeTextContent(I('dropmessage'),'only can accept image files')
+}
+
+const setCanvasDropInterfaceDefault = () =>{
+    setRoot('--canvasContainerBg','#333')
+    isCanvasEmpty(newCanvas(I('imageToEdit')))?show(I('file')):""
 }
