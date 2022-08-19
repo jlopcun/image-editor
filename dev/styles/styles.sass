@@ -35,12 +35,12 @@ ul
 body
     background-color: $interfaceBg
 .imageEditor
-    @include mix.flex(row,wrap,center,flex-start)
+    @include mix.flex(column,wrap,center,flex-start)
+    width:100vw
     font-family: Arial, Helvetica, sans-serif
-    margin-top: 5rem
     &__download
         flex-basis:100%
-        align-self: flex-end
+        align-self: center
         text-align: center
         margin-top:1rem
         cursor: pointer
@@ -51,8 +51,8 @@ body
 .canvasContainer
     position: relative
     @include mix.flex(row,wrap,center,center)
-    width: max(25rem,50%)
-    height:25rem
+    width:100%
+    height:80vh
     padding: 2rem
     border: 5px solid $highlighted
     overflow: hidden
@@ -86,6 +86,7 @@ body
     display: block
     max-width: 100%
     max-height:100%
+    
 
 
 .loader
@@ -101,15 +102,14 @@ body
     
 .filterMenu
     background-color: $interfaceBg
-    @include mix.flex(column,wrap,flex-start,center)
-    width: $mainInterfaceSize
-    height: $mainInterfaceSize
+    @include mix.flex(row,nowrap,flex-start,center)
+    width:100%
     border : 5px solid $highlighted
     &__filter
         $font-size:1em
         $border:5px solid #fff
         background-color: $interfaceBg
-        width:100%
+        min-width:5rem
         height:2.5rem
         padding:
             top:.5rem
@@ -136,3 +136,10 @@ body
         transform: translateX(-50%) translateY(-50%) rotate(0deg) 
     to
         transform: translateX(-50%) translateY(-50%) rotate(360deg) 
+
+
+// MEDIA QUERYS
+$numberOfFilters : 8
+@media screen and (max-width:#{5 * 16 * $numberOfFilters}px)
+    .filterMenu
+        overflow: scroll

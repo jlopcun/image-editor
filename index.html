@@ -13,6 +13,16 @@
 <body>
     
     <article class="imageEditor">
+        <div class="canvasContainer" id="canvasContainer">
+            <div class="getFile" id="file">
+                <label for="fileGetter" class="getFile__label" tabindex="0" aria-label="choose a file" role="button">Choose an image</label>
+                <input type="file"  id="fileGetter" class="getFile__input" accept="image/*">
+            </div>
+            <p class="dropmessage hidden" id="dropmessage">Drop it!!!</p>
+            <canvas class="editedImage" id="editedImage">
+            </canvas>
+            <div class="loader hidden" id="loader"></div>
+        </div>
         <ul class="filterMenu" id="filterChoose">
             <li class="filterMenu__filter" tabindex="0">glitch</li>
             <li class="filterMenu__filter" tabindex="0">grayscale</li>
@@ -23,18 +33,8 @@
             <li class="filterMenu__filter" tabindex="0">restore</li>
             <li class="filterMenu__filter" tabindex="0">clear</li>
         </ul>
-            <div class="canvasContainer" id="canvasContainer">
-                <div class="getFile" id="file">
-                    <label for="fileGetter" class="getFile__label" tabindex="0" aria-label="choose a file" role="button">Choose an image</label>
-                    <input type="file"  id="fileGetter" class="getFile__input" accept="image/*">
-                </div>
-                <p class="dropmessage hidden" id="dropmessage">Drop it!!!</p>
-                <canvas class="editedImage" id="editedImage">
-                </canvas>
-                <div class="loader hidden" id="loader"></div>
-            </div>
 
-        <a download id="imageDownloadLink" class="imageEditor__download">Download the image</a>
+        <a download id="imageDownloadLink" class="imageEditor__download">🡻Download</a>
         <img id="imageToEdit" alt="selected image" class="imageToEdit" hidden>
     </article>
     <!-- <div class="pixelColor"></div> -->
