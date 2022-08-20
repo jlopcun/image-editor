@@ -35,15 +35,20 @@ ul
 body
     background-color: $interfaceBg
 .imageEditor
-    @include mix.flex(column,wrap,center,flex-start)
+    @include mix.grid($rows : 55% 35% 10%)
     width:100vw
+    height:100vh
     font-family: Arial, Helvetica, sans-serif
     &__download
-        flex-basis:100%
+        position: absolute
+        top: 1vmin
+        right: 3vmin
         align-self: center
         text-align: center
-        margin-top:1rem
+        border: 1px solid $highlighted
+        padding: .5vmin 1vmin
         cursor: pointer
+        text-decoration: none
         color : $highlighted
         &::selection
             display: none
@@ -51,22 +56,20 @@ body
 .canvasContainer
     position: relative
     @include mix.flex(row,wrap,center,center)
-    width:100%
-    height:80vh
     padding: 2rem
     border: 5px solid $highlighted
     overflow: hidden
     background-color: var(--canvasContainerBg)
+
 
 .getFile
     @include mix.flex(column,wrap,center,center)
     @include mix.absoluteCentered()
     @include mix.button($width : 14rem,$padding : 1rem)
     @include mix.neumorphism($background: $interfaceBg)
-    
+    @extend %rounded
     transform: translateX(-50%) translateY(-50%)
     color:$highlighted
-    border-radius: 50px
     z-index:1
     
     &__label
@@ -105,12 +108,13 @@ body
     @include mix.flex(row,nowrap,flex-start,center)
     width:100%
     border : 5px solid $highlighted
+
     &__filter
         $font-size:1em
         $border:5px solid #fff
         background-color: $interfaceBg
         min-width:5rem
-        height:2.5rem
+        height:100%
         padding:
             top:.5rem
             bottom:.5rem
@@ -128,7 +132,15 @@ body
             color: $highlighted
             border-color:$highlighted
 
-
+.cssFilters
+    width:100%
+    padding: .5rem
+    border: 5px solid $highlighted
+    &__filter
+        @include mix.center($Y : center)
+        height: calc(90% / 8)
+        &__name
+            color: $highlighted
 
 // ANIMATIONS/KEYFRAMES
 @keyframes rotate
@@ -143,3 +155,12 @@ $numberOfFilters : 8
 @media screen and (max-width:#{5 * 16 * $numberOfFilters}px)
     .filterMenu
         overflow: scroll
+
+@media screen and (min-width:640px)
+    .imageEditor
+        @include mix.grid($rows : 8fr 2fr,$columns : 3fr 7fr)
+
+    .filterMenu
+        grid-column: span 2
+    .cssFilters
+        order:-1

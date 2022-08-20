@@ -4,6 +4,16 @@
     justify-content: $justify
     align-items: $align
 
+@mixin grid($rows : null,$columns : null,$areas : null)
+    display: grid
+
+    @if $rows
+        grid-template-rows: $rows
+    @if $columns
+        grid-template-columns:$columns
+    @if $areas
+        grid-template-areas: $areas
+
 @mixin absoluteCentered()
     position: absolute
     top:50%
@@ -22,5 +32,10 @@
 
   background: linear-gradient(145deg, $highlight, $lowlight)
   box-shadow: 2em 2em 4em $shadowlow, -2em -2em 4em $shadowhigh
+
+@mixin center($X : null,$Y : null)
+    display: flex
+    justify-content: if($X,$X,flex-start)
+    align-items: if($Y,$Y,flex-start)
 
 
