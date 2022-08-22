@@ -31,6 +31,16 @@ const changeTextContent = (el,text) =>{
 const hide = el => el.classList.add('hidden')
 const show = el => el.classList.remove('hidden')
 
+const getInputValue = input => `${input.value || input.textContent}${input.dataset.unit}`
+
+const getId = el => el.id
+
+const toArray = DOMlist => Array.from(DOMlist)
+
+const objKeys = obj => Object.keys(obj)
+const objValues = obj => Object.values(obj)
+const objKeyVal = (obj,eqStart,eqEnd = "",separator=",") => objKeys(obj).map((setting,index)=> `${setting}${eqStart}${objValues(obj)[index]}${eqEnd}`).join(separator)
+
 function hideLoader(){
     hide(I('loader'))
 }
@@ -45,6 +55,8 @@ const clearCanvas = canvas =>{
     canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
     canvas.ctx.filter = "none"
 }
+
+
 const drawImage = (canvas,HTMLimage) => canvas.ctx.drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
 const newCanvas = (canvas)=>{
     return {
@@ -88,12 +100,13 @@ const setImage = function(file,canvas,callback){
 
 
 // FILTER METHODS AND OBJECTS
-const setFilter = (filter,imageData,canvas,callback)=>{
+const setFilter = (filter,imageData,canvas,callback = null)=>{
+    console.log(`appliying ${filter}`)
     filters[filter](imageData,canvas)
 
-    callback(I('loader'))
+    if(callback!==null) callback()
 
-    
+
 }
 
 const setDifferentColors = (pixels,colorChanges,conditional,cb) =>{
@@ -128,51 +141,32 @@ const newFilter = (imageData,canvasObject,colorChanges,conditional=false)=> {
     setDownloadLink(canvasObject,'imageDownloadLink')
 }
 
+const cssFilterSettings = {
+    "blur":getInputValue(I('blur')),
+    "brightness":getInputValue(I('brightness')),
+    "contrast":getInputValue(I('contrast')),
+    "grayscale":getInputValue(I('grayscale')),
+    "hue-rotate":getInputValue(I('hue-rotate')),
+    "invert":getInputValue(I('invert')),
+    "saturate":getInputValue(I('saturate')),
+    "sepia":getInputValue(I('sepia'))
+
+}
+
+const updateCssFilters = (canvasObj,nonCssFilters,callback) =>{
+        const filterValues = objKeyVal(cssFilterSettings, "(" , ")" , " ")
+        
+
+        const vals = objValues(cssFilterSettings)
+        canvasObj.ctx.filter = `blur(${vals[0]}) brightness(${vals[1]}) contrast(${vals[2]}) grayscale(${vals[3]}) hue-rotate(${vals[4]}) invert(${vals[5]}) saturate(${vals[6]}) sepia(${vals[7]})`
+        setTimeout(()=>toArray(nonCssFilters).forEach(filter=> setFilter(filter,canvasObj.imageData,canvasObj)),0)
+        drawImage(newCanvas(I('editedImage')),I('imageToEdit'))
+        setDownloadLink(canvasObj,'imageDownloadLink')
+        if(callback) callback()
+}
 
 const filters = {
     'glitch':(imageData,canvas)=> newFilter(imageData,canvas,[0,255,0],()=>randomNum(1,10) > 6),
-    'grayscale':(imageData,canvas)=>{
-            for(let i=0;i<imageData.data.length; i+=4){
-                const colors = [
-                    imageData.data[i],
-                    imageData.data[i + 1],
-                    imageData.data[i + 2]
-                ]
-                if(colors.reduce((ant,act)=>ant+act)>=128){
-                    imageData.data[i] = imageData.data[i] - 70
-                    imageData.data[i + 1] = imageData.data[i + 1] - 70
-                    imageData.data[i + 2] = imageData.data[i + 2] - 70
-                }
-
-            }
-            updateImageData(imageData,canvas)
-            setDownloadLink(canvas,'imageDownloadLink')
-            
-    },
-    'blue':(imageData,canvas)=>{
-        newFilter(imageData,canvas,[-50,-50,+50],()=>true)
-    }
-    ,
-    'blur':(imageData,canvas)=>{
-        canvas.ctx.filter = `blur(${canvas.width / 150 + canvas.height / 150}px)`
-
-        updateImageData(imageData,canvas)
-        setDownloadLink(canvas,'imageDownloadLink')
-    },
-    'restore':(imageData,canvas)=>{
-        clearCanvas(canvas)
-        drawImage(canvas,I('imageToEdit'))
-        setDownloadLink(canvas,'imageDownloadLink')
-       
-    },
-    'pale':(imageData,canvas)=> newFilter(imageData,canvas,[50,50,0],()=>true)
-    ,
-    'clear':(imageData,canvas)=>{
-        I('imageToEdit').src = ""
-        clearCanvas(canvas)
-        I('imageDownloadLink').removeAttribute('href')
-        show(I('file'))
-    },
     "crash":(imageData,canvas)=>{
         for(let i=0;i<imageData.data.length;i+=4){
             const newColor = randomNum(1,10) > 5 ?i + randomNum(-1,4):i
@@ -182,8 +176,55 @@ const filters = {
         }
         updateImageData(imageData,canvas)
         setDownloadLink(canvas,'imageDownloadLink')
-    }
+    },
+    'restore':(imageData,canvas)=>{
+        clearCanvas(canvas)
+        drawImage(canvas,I('imageToEdit'))
+        setDownloadLink(canvas,'imageDownloadLink')
+       
+    },
+    'clear':(imageData,canvas)=>{
+        I('imageToEdit').src = ""
+        clearCanvas(canvas)
+        I('imageDownloadLink').removeAttribute('href')
+        show(I('file'))
+    },
+    // 'grayscale':(imageData,canvas)=>{
+    //         for(let i=0;i<imageData.data.length; i+=4){
+    //             const colors = [
+    //                 imageData.data[i],
+    //                 imageData.data[i + 1],
+    //                 imageData.data[i + 2]
+    //             ]
+    //             if(colors.reduce((ant,act)=>ant+act)>=128){
+    //                 imageData.data[i] = imageData.data[i] - 70
+    //                 imageData.data[i + 1] = imageData.data[i + 1] - 70
+    //                 imageData.data[i + 2] = imageData.data[i + 2] - 70
+    //             }
+
+    //         }
+    //         updateImageData(imageData,canvas)
+    //         setDownloadLink(canvas,'imageDownloadLink')
+            
+    // },
+    // 'blue':(imageData,canvas)=>{
+    //     newFilter(imageData,canvas,[-50,-50,+50],()=>true)
+    // }
+    // ,
+    // 'blur':(imageData,canvas)=>{
+    //     canvas.ctx.filter = `blur(${canvas.width / 150 + canvas.height / 150}px)`
+
+    //     updateImageData(imageData,canvas)
+    //     setDownloadLink(canvas,'imageDownloadLink')
+    // },
+    
+    // 'pale':(imageData,canvas)=> newFilter(imageData,canvas,[50,50,0],()=>true)
+    // ,
+    
+    
 }
+
+
 
 
 // FILE METHODS

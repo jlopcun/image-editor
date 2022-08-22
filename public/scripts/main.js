@@ -1,17 +1,31 @@
 'use strict'
 
 const app = function(canvas,file){
+
+    const appliedFilters = new Set()
+
     resetDragDropDefaults()
     on('change',(e)=>{
         setImage(e.target.files[0],newCanvas(canvas),hideLoader)
     },file)
 
     on('click',(e)=>{
-        if(e.target===e.currentTarget) return
-        show(I('loader'))
+        if(e.target===e.currentTarget || isCanvasEmpty(newCanvas(canvas))) return
+        const filterName = e.target.textContent
         const canvasObj = newCanvas(I('editedImage'))
-        setTimeout(()=>setFilter(e.target.textContent,canvasObj.imageData,canvasObj,hideLoader),0)
-        
+
+        show(I('loader'))
+
+        if(!appliedFilters.has(e.target.textContent)){
+            setTimeout(()=>setFilter(e.target.textContent,canvasObj.imageData,canvasObj,hideLoader),0)
+            appliedFilters.add(e.target.textContent)
+            if (filterName==="clear" || filterName==="restore") appliedFilters.clear()
+            return
+        }
+        hide(I('loader'))
+        appliedFilters.add(e.target.textContent);
+        if (filterName==="clear" || filterName==="restore") appliedFilters.clear()
+        console.log(appliedFilters)
     },I('filterChoose'))
 
     
@@ -41,6 +55,15 @@ const app = function(canvas,file){
         hide(I('dropmessage'))
     },I('canvasContainer'))
     
+
+    on('change',(e)=>{
+        show(I('loader'))
+        
+        cssFilterSettings[getId(e.target)] = getInputValue(e.target)
+        
+        updateCssFilters(newCanvas(canvas),appliedFilters,hideLoader)
+
+    },I('cssFilters'))
 }
 
 app(I('editedImage'),I('fileGetter'))
