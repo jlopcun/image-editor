@@ -2,7 +2,6 @@
 
 const app = function(canvas,file){
 
-    const appliedFilters = new Set()
 
     resetDragDropDefaults()
     on('change',(e)=>{
@@ -10,22 +9,8 @@ const app = function(canvas,file){
     },file)
 
     on('click',(e)=>{
-        if(e.target===e.currentTarget || isCanvasEmpty(newCanvas(canvas))) return
-        const filterName = e.target.textContent
-        const canvasObj = newCanvas(I('editedImage'))
-
         show(I('loader'))
-
-        if(!appliedFilters.has(e.target.textContent)){
-            setTimeout(()=>setFilter(e.target.textContent,canvasObj.imageData,canvasObj,hideLoader),0)
-            appliedFilters.add(e.target.textContent)
-            if (filterName==="clear" || filterName==="restore") appliedFilters.clear()
-            return
-        }
-        hide(I('loader'))
-        appliedFilters.add(e.target.textContent);
-        if (filterName==="clear" || filterName==="restore") appliedFilters.clear()
-        console.log(appliedFilters)
+        setTimeout(()=>setFilter(e.target.textContent,newCanvas(canvas).imageData,newCanvas(canvas),hideLoader),0)
     },I('filterChoose'))
 
     
@@ -58,11 +43,9 @@ const app = function(canvas,file){
 
     on('change',(e)=>{
         show(I('loader'))
-        
         cssFilterSettings[getId(e.target)] = getInputValue(e.target)
         
-        updateCssFilters(newCanvas(canvas),appliedFilters,hideLoader)
-
+        setTimeout(()=>updateCssFilters(newCanvas(canvas),newCanvas(canvas).imageData,hideLoader),1)
     },I('cssFilters'))
 }
 

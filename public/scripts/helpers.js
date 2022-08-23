@@ -7,6 +7,15 @@ const attr = R.curry((attribute,value,element)=>{
     element.setAttribute(attribute,value)
     return element
 })
+
+const append = (el,node) =>{
+    el.appendChild(node)
+}
+
+const addClass = (el,...className) =>{
+    el.classList.add(...className)
+}
+
 const image =(src,id)=>{
     return R.compose(
         attr('src',src)
@@ -74,6 +83,16 @@ const updateImageData = (imageData,canvas) =>{
     drawImage(canvas,canvas.ref)
 }
 const setDownloadLink = (canvas,linkId)=> I(linkId).href = canvas.ref.toDataURL()
+
+const createCanvasElement = () =>{
+    const canvas = document.createElement('canvas')
+    const canvasObj = newCanvas(canvas)
+    const img = I('imageToEdit')
+    equalSizes(I('imageToEdit'),canvas)
+    drawImage(canvasObj,document.createElement('img'))
+    addClass(canvas,'editedImage','canvasFilter')
+    return canvas
+}
 // IMAGE HELPER METHODS
 
 
@@ -82,6 +101,7 @@ const equalSizes = (sizeGetter,sizePut) =>{
     sizePut.width = sizeGetter.width
     sizePut.height = sizeGetter.height
 }
+
 
 const setImage = function(file,canvas,callback){
         hide(I('file'))
@@ -101,7 +121,6 @@ const setImage = function(file,canvas,callback){
 
 // FILTER METHODS AND OBJECTS
 const setFilter = (filter,imageData,canvas,callback = null)=>{
-    console.log(`appliying ${filter}`)
     filters[filter](imageData,canvas)
 
     if(callback!==null) callback()
@@ -153,16 +172,15 @@ const cssFilterSettings = {
 
 }
 
-const updateCssFilters = (canvasObj,nonCssFilters,callback) =>{
-        const filterValues = objKeyVal(cssFilterSettings, "(" , ")" , " ")
-        
+const updateCssFilters = (canvasObj,imageData,callback = null) =>{
 
         const vals = objValues(cssFilterSettings)
         canvasObj.ctx.filter = `blur(${vals[0]}) brightness(${vals[1]}) contrast(${vals[2]}) grayscale(${vals[3]}) hue-rotate(${vals[4]}) invert(${vals[5]}) saturate(${vals[6]}) sepia(${vals[7]})`
-        setTimeout(()=>toArray(nonCssFilters).forEach(filter=> setFilter(filter,canvasObj.imageData,canvasObj)),0)
-        drawImage(newCanvas(I('editedImage')),I('imageToEdit'))
+        drawImage(canvasObj,I('imageToEdit'))
         setDownloadLink(canvasObj,'imageDownloadLink')
-        if(callback) callback()
+
+        if(callback!==null) callback()
+        
 }
 
 const filters = {
