@@ -35,7 +35,7 @@
 
 @mixin center($X : null,$Y : null)
     display: flex
-    justify-content: if($X,$X,flex-start)
-    align-items: if($Y,$Y,flex-start)
+    justify-content: if($X,center,flex-start)
+    align-items: if($Y,center,flex-start)
 
 

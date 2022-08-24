@@ -2,15 +2,16 @@
 
 const app = function(canvas,file){
 
-
+    resetCssInputs()
     resetDragDropDefaults()
     on('change',(e)=>{
         setImage(e.target.files[0],newCanvas(canvas),hideLoader)
     },file)
 
     on('click',(e)=>{
+        if(e.target===e.currentTarget || isCanvasEmpty(newCanvas(canvas))) return
         show(I('loader'))
-        setTimeout(()=>setFilter(e.target.textContent,newCanvas(canvas).imageData,newCanvas(canvas),hideLoader),0)
+        setTimeout(()=>setFilter(e.target.textContent,newCanvas(application.filterLayer).imageData,newCanvas(application.filterLayer),hideLoader),0)
     },I('filterChoose'))
 
     
@@ -49,5 +50,5 @@ const app = function(canvas,file){
     },I('cssFilters'))
 }
 
-app(I('editedImage'),I('fileGetter'))
+app(application.mainLayer,I('fileGetter'))
 

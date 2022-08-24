@@ -21,8 +21,11 @@
                 <input type="file"  id="fileGetter" class="getFile__input" accept="image/*">
             </div>
             <p class="dropmessage hidden" id="dropmessage">Drop it!!!</p>
-            <canvas class="editedImage" id="editedImage">
-                <canvas class="editedImage canvasFilter"></canvas>
+            <div class="layers" id="layers">
+                <canvas class="mainLayer" id="mainLayer"></canvas>
+                <canvas class="filterLayer" id="filterLayer"></canvas>
+            </div>
+            
             </canvas>
             
             <div class="loader hidden" id="loader"></div>
@@ -64,15 +67,18 @@
         <ul class="filterMenu" id="filterChoose">
             <li class="filterMenu__filter" tabindex="0">glitch</li>
             <li class="filterMenu__filter" tabindex="0">crash</li>
-            <li class="filterMenu__filter" tabindex="0">restore</li>
+            <li class="filterMenu__filter" tabindex="0">square</li>
+            <li class="filterMenu__filter" tabindex="0">reset</li>
             <li class="filterMenu__filter" tabindex="0">clear</li>
         </ul>
 
         
         <img id="imageToEdit" alt="selected image" class="imageToEdit" hidden>
+
     </article>
 
     <script src="//cdn.jsdelivr.net/npm/ramda@latest/dist/ramda.min.js"></script>
+    <script src="public/scripts/application.js"></script>
     <script src="public/scripts/helpers.js"></script>
     <script src="public/scripts/main.js"></script>
 </body>
