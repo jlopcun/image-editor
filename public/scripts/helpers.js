@@ -55,46 +55,39 @@ function hideLoader(){
 }
 // CANVAS RELATED METHODS AND OBJECTS
 
-const newCanvas = (canvas)=>{
-    return {
-        ctx:canvas.getContext('2d'),
-        ref:canvas,
-        width:canvas.width,
-        height:canvas.height,
-        imageData:canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height),
-        X:(pageX)=>parseInt(Math.abs(pageX - canvas.getBoundingClientRect().left)),
-        Y:(pageY)=>parseInt(Math.abs(pageY - canvas.getBoundingClientRect().top))
-    }
-}
 
-const isCanvasEmpty = canvasObj => canvasObj.imageData.data.reduce((prev,act)=>prev+act) === 0
+
+const isCanvasEmpty = canvasObj => canvasObj.getImageData().data.reduce((prev,act)=>prev+act) === 0
 
 
 
 const clearCanvas = canvas =>{
-    canvas.ctx.clearRect(0,0,canvas.width,canvas.height)
-    canvas.ctx.filter = "none"
+    canvas.ctx().clearRect(0,0,canvas.getWidth(),canvas.getHeight())
+    canvas.ctx().filter = "none"
 }
 
 
-const drawImage = (canvas,HTMLimage) => canvas.ctx.drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
+const drawImage = (canvas,HTMLimage) => canvas.ctx().drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
 
 const updateImageData = (imageData,canvas) =>{
-    canvas.ctx.putImageData(imageData,0,0)
+    canvas.ctx().putImageData(imageData,0,0)
     // drawImage(canvas,canvas.ref)
 }
-const setDownloadLink = (linkId)=>{
-    drawImage(newCanvas(application.mainLayer),application.filterLayer)
-    I(linkId).href = newCanvas(application.mainLayer).ref.toDataURL()
+const download = (callback)=>{
+    const a = elem('a')
+    const downloadCanvas = createCanvasElement(application.mainLayer.ref,application.filterLayer.ref)
+    a.href = downloadCanvas.ref.toDataURL()
+    attr('download','jl_edited_image',a)
+    a.click()
+    if(callback) callback()
 }
 
-const createCanvasElement = () =>{
-    const canvas = document.createElement('canvas')
-    const canvasObj = newCanvas(canvas)
-    const img = I('imageToEdit')
-    equalSizes(I('imageToEdit'),canvas)
-    drawImage(canvasObj,document.createElement('img'))
-    addClass(canvas,'mainLayer','canvasFilter')
+const createCanvasElement = (...image) =>{
+    const canvas = newCanvas(document.createElement('canvas')),
+    img = I('imageToEdit')
+    console.log(image[0])
+    equalSizes(image[0],canvas.ref);
+    [...image].forEach(img=>drawImage(canvas,img))
     return canvas
 }
 // IMAGE HELPER METHODS
@@ -114,10 +107,9 @@ const setImage = function(file,canvas,callback){
         on('load',()=>{
 
                 equalSizes(img,canvas.ref)
-                equalSizes(img,I('filterLayer'))
+                equalSizes(img,application.filterLayer.ref)
                 drawImage(canvas,img)
 
-                setDownloadLink('imageDownloadLink')
                 callback()
             
         },img)
@@ -143,10 +135,10 @@ const cssFilterSettings = {
 const updateCssFilters = (canvasObj,imageData,callback = null) =>{
 
         const vals = objValues(cssFilterSettings)
-        canvasObj.ctx.filter = `blur(${vals[0]}) brightness(${vals[1]}) contrast(${vals[2]}) grayscale(${vals[3]}) hue-rotate(${vals[4]}) invert(${vals[5]}) saturate(${vals[6]}) sepia(${vals[7]})`
+        canvasObj.ctx().filter = `blur(${vals[0]}) brightness(${vals[1]}) contrast(${vals[2]}) grayscale(${vals[3]}) hue-rotate(${vals[4]}) invert(${vals[5]}) saturate(${vals[6]}) sepia(${vals[7]})`
         drawImage(canvasObj,I('imageToEdit'))
-        canvasObj.ctx.filter = "none"
-        setDownloadLink('imageDownloadLink')
+        canvasObj.ctx().filter = "none"
+
 
         if(callback!==null) callback()
         
@@ -200,7 +192,7 @@ const newFilter = (imageData,canvasObject,colorChanges,conditional=false)=> {
     ?setDifferentColors(imageData.data,colorChanges,conditional)
     :setSameColor(imageData.data,colorChanges,conditional)
     updateImageData(imageData,canvasObject)
-    setDownloadLink('imageDownloadLink')
+
 }
 
 
@@ -213,7 +205,7 @@ const filters = {
 
     },
     "crash":(imageData,canvas)=>{
-        const mainLayer = newCanvas(application.mainLayer).imageData
+        const mainLayer = application.mainLayer.getImageData()
         for(let i=0;i<imageData.data.length;i+=4){
             if(randomNum(1,10)>5){
                 const newColor = i + randomNum(-1,4)
@@ -224,26 +216,15 @@ const filters = {
             }
         }
         updateImageData(imageData,canvas)
-        setDownloadLink('imageDownloadLink')
+
     },
     'reset':(imageData,canvas)=>{
-        clearCanvas(newCanvas(application.filterLayer))
-        clearCanvas(newCanvas(application.mainLayer))
-        drawImage(newCanvas(application.mainLayer),I('imageToEdit'))
+        clearCanvas(application.filterLayer)
+        clearCanvas(application.mainLayer)
+        drawImage(application.mainLayer,I('imageToEdit'))
         resetCssInputs()
-        setDownloadLink('imageDownloadLink')
+
        
-    },
-    'clear':(imageData,canvas)=>{
-        I('imageToEdit').src = ""
-        clearCanvas(newCanvas(application.filterLayer))
-        clearCanvas(newCanvas(application.mainLayer))
-        resetCssInputs()
-        I('imageDownloadLink').removeAttribute('href')
-        show(I('file'))
-    },
-    "square":(imageData,canvas)=>{
-        canvas.ctx.fillRect(0,0,100,100)
     }
     
     

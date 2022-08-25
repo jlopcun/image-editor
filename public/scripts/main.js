@@ -1,17 +1,16 @@
 'use strict'
 
 const app = function(canvas,file){
-
     resetCssInputs()
     resetDragDropDefaults()
     on('change',(e)=>{
-        setImage(e.target.files[0],newCanvas(canvas),hideLoader)
+        setImage(e.target.files[0],canvas,hideLoader)
     },file)
 
     on('click',(e)=>{
-        if(e.target===e.currentTarget || isCanvasEmpty(newCanvas(canvas))) return
+        if(e.target===e.currentTarget || isCanvasEmpty(canvas)) return
         show(I('loader'))
-        setTimeout(()=>setFilter(e.target.textContent,newCanvas(application.filterLayer).imageData,newCanvas(application.filterLayer),hideLoader),0)
+        setTimeout(()=>setFilter(e.target.dataset.filter || e.target.closest('[data-filter]').dataset.filter,application.filterLayer.getImageData(),application.filterLayer,hideLoader),0)
     },I('filterChoose'))
 
     
@@ -20,18 +19,19 @@ const app = function(canvas,file){
         checkFileType(e.dataTransfer.items[0],'image')
         ?expectedDropFileValidation()
         :unexpectedDropFileValidation()
-        isCanvasEmpty(newCanvas(canvas))?show(I('dropmessage')):""
+        isCanvasEmpty(canvas)?show(I('dropmessage')):""
         hide(I('file'))
     },I('canvasContainer'))
 
     on('drop',(e)=>{
         const file = e.dataTransfer.files[0]
         hide(I('dropmessage'))
+        resetCssInputs()
         if(!checkFileType(file,'image')) {
             setCanvasDropInterfaceDefault()
             return
         }
-        setImage(e.dataTransfer.files[0],newCanvas(canvas),hideLoader)
+        setImage(e.dataTransfer.files[0],canvas,hideLoader)
         setRoot('--canvasContainerBg','#333')
         
     },I('canvasContainer'))
@@ -40,14 +40,39 @@ const app = function(canvas,file){
         setCanvasDropInterfaceDefault()
         hide(I('dropmessage'))
     },I('canvasContainer'))
-    
+    on('dragend',()=>{
+        setCanvasDropInterfaceDefault()
+        hide(I('dropmessage'))
+    },I('canvasContainer'))
 
     on('change',(e)=>{
         show(I('loader'))
         cssFilterSettings[getId(e.target)] = getInputValue(e.target)
         
-        setTimeout(()=>updateCssFilters(newCanvas(canvas),newCanvas(canvas).imageData,hideLoader),1)
+        setTimeout(()=>updateCssFilters(canvas,canvas.getImageData(),hideLoader),1)
     },I('cssFilters'))
+
+
+    on('click',(e)=>{
+        if(isCanvasEmpty(canvas)) return
+        show(I('loader'))
+        setTimeout(()=>download(hideLoader),0)
+    },I('imageDownloadButton'))
+
+
+    on('click',()=>{
+        clearCanvas(canvas)
+        drawImage(canvas,I('imageToEdit'))
+        resetCssInputs()
+    },I('resetCss'))
+
+    on('click',()=>{
+        I('imageToEdit').src = ""
+        clearCanvas(application.filterLayer)
+        clearCanvas(application.mainLayer)
+        resetCssInputs()
+        show(I('file'))
+    },I('clearCanvas'))
 }
 
 app(application.mainLayer,I('fileGetter'))

@@ -15,7 +15,8 @@
     <article class="imageEditor">
         
         <div class="canvasContainer" id="canvasContainer">
-            <a download id="imageDownloadLink" class="imageEditor__download">🡻Download</a>
+            <button id="imageDownloadButton" class="imageEditor__download">Download</button>
+            <button id="clearCanvas" class="imageEditor__clear">Clear</button>
             <div class="getFile" id="file">
                 <label for="fileGetter" class="getFile__label" tabindex="0" aria-label="choose a file" role="button">Choose an image</label>
                 <input type="file"  id="fileGetter" class="getFile__input" accept="image/*">
@@ -25,8 +26,6 @@
                 <canvas class="mainLayer" id="mainLayer"></canvas>
                 <canvas class="filterLayer" id="filterLayer"></canvas>
             </div>
-            
-            </canvas>
             
             <div class="loader hidden" id="loader"></div>
         </div>
@@ -63,13 +62,23 @@
                 <input type="range" min="0" max="100" step="5" value="0" class="cssFilters__filter__value" id="sepia" autocomplete="off" data-default="0" data-unit="%">
                 <label for="sepia" class="cssFilters__filter__name">sepia</label>
             </div>
+            <button class="cssFilters__reset" id="resetCss">
+                <img src="assets/arrows-circle.svg" alt="reset" class="cssFilters__reset__img">
+            </button>
         </div>
         <ul class="filterMenu" id="filterChoose">
-            <li class="filterMenu__filter" tabindex="0">glitch</li>
-            <li class="filterMenu__filter" tabindex="0">crash</li>
-            <li class="filterMenu__filter" tabindex="0">square</li>
-            <li class="filterMenu__filter" tabindex="0">reset</li>
-            <li class="filterMenu__filter" tabindex="0">clear</li>
+            <li class="filterMenu__filter" tabindex="0" data-filter="glitch">
+                <img class="filterMenu__filter__thumb" alt="glitch" src="assets/glitch_thumb.png">
+                <p class="filterMenu__filter__name">glitch</p>
+            </li>
+            <li class="filterMenu__filter" tabindex="0" data-filter="crash">
+                <img src="assets/crash_thumb.png" alt="crash" class="filterMenu__filter__thumb">
+                <p class="filterMenu__filter__name">crash</p>
+            </li>
+            <li class="filterMenu__filter" tabindex="0" data-filter="reset">
+                <img src="assets/el-angel-caido.jpg" alt="reset" class="filterMenu__filter__thumb">
+                <p class="filterMenu__filter__name">reset</p>
+            </li>
         </ul>
 
         
