@@ -220,11 +220,6 @@ const filters = {
     },
     'reset':(imageData,canvas)=>{
         clearCanvas(application.filterLayer)
-        clearCanvas(application.mainLayer)
-        drawImage(application.mainLayer,I('imageToEdit'))
-        resetCssInputs()
-
-       
     }
     
     
