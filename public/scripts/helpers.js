@@ -133,9 +133,10 @@ const cssFilterSettings = {
 }
 
 const updateCssFilters = (canvasObj,imageData,callback = null) =>{
-
+        clearCanvas(canvasObj)
         const vals = objValues(cssFilterSettings)
         canvasObj.ctx().filter = `blur(${vals[0]}) brightness(${vals[1]}) contrast(${vals[2]}) grayscale(${vals[3]}) hue-rotate(${vals[4]}) invert(${vals[5]}) saturate(${vals[6]}) sepia(${vals[7]})`
+        
         drawImage(canvasObj,I('imageToEdit'))
         canvasObj.ctx().filter = "none"
 
