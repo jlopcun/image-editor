@@ -70,7 +70,9 @@ body
     &__menu
         @include mix.flex($direction:row ,$wrap:wrap ,$justify:flex-start ,$align:center )
         &__item
+            $numberOfItems : 4
             width:7rem
+            max-width: calc(100% / $numberOfItems)
             position: relative
             padding: 1rem
             border: 1px solid #000
