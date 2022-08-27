@@ -5,6 +5,7 @@ const app = function(canvas,file){
     resetDragDropDefaults()
     on('change',(e)=>{
         setImage(e.target.files[0],canvas,hideLoader)
+        resetCssInputs()
     },file)
 
     on('click',(e)=>{
@@ -33,6 +34,7 @@ const app = function(canvas,file){
         }
         setImage(e.dataTransfer.files[0],canvas,hideLoader)
         setRoot('--canvasContainerBg','#333')
+        resetCssInputs()
         
     },I('canvasContainer'))
 
@@ -75,5 +77,7 @@ const app = function(canvas,file){
     },I('clearCanvas'))
 }
 
+
 app(application.mainLayer,I('fileGetter'))
+
 

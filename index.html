@@ -13,10 +13,60 @@
 <body>
     
     <article class="imageEditor">
-        
+        <nav class="navigation">
+            <ul class="navigation__menu">
+                <li class="navigation__menu__item">
+                    <p class="navigation__menu__item__text">File</p>
+                    <div class="navigation__menu__item__subItemWrapper">
+                        <button id="clearCanvas" class="navigation__menu__item__subItem">Clear canvas</button>
+                        <button id="imageDownloadButton" class="navigation__menu__item__subItem">Save image</button>
+                    </div>
+                </li>
+                <li class="navigation__menu__item">
+                    <p class="navigation__menu__item__text">Effects</p>
+                    <div class="navigation__menu__item__subItemWrapper" id="cssFilters">
+                        <div class="cssFilters__filter navigation__item__subItemWrapper">
+                            <input  type="range" min="0" max="20" step="2.5" value="1" class="cssFilters__filter__value" id="blur" autocomplete="off" data-default="0" data-unit="px">
+                            <label for="blur"  class="cssFilters__filter__name">blur</label>
+                        </div>
+                        <div class="cssFilters__filter navigation__item__subItemWrapper">
+                            <input type="range" min="0" max="1" step=".1" value="1" class="cssFilters__filter__value" id="brightness" autocomplete="off" data-default="1" data-unit="">
+                            <label for="brightness" class="cssFilters__filter__name">brightness</label>
+                        </div>
+                        <div class="cssFilters__filter navigation__item__subItemWrapper">
+                            <input type="range" min="0" max="200" step="10" value="100" class="cssFilters__filter__value" id="contrast" autocomplete="off" data-default="100" data-unit="%">
+                            <label for="contrast" class="cssFilters__filter__name">contrast</label>
+                        </div>
+                        <div class="cssFilters__filter navigation__item__subItemWrapper">
+                            <input type="range" min="0" max="100" step="5" value="0" class="cssFilters__filter__value" id="grayscale" autocomplete="off" data-default="0" data-unit="%">
+                            <label for="grayscale" class="cssFilters__filter__name">grayscale</label>
+                        </div>
+                        <div class="cssFilters__filter navigation__item__subItemWrapper">
+                            <input type="range" min="0" max="360" step="5" value="0" class="cssFilters__filter__value" id="hue-rotate" autocomplete="off" data-default="0" data-unit="deg">
+                            <label for="hue-rotate" class="cssFilters__filter__name">hue-rotate</label>
+                        </div>
+                        <div class="cssFilters__filter navigation__item__subItemWrapper">
+                            <input type="range" min="0" max="100" step="5" value="0" class="cssFilters__filter__value" id="invert" autocomplete="off" data-default="0" data-unit="%">
+                            <label for="invert" class="cssFilters__filter__name">invert</label>
+                        </div>
+                        <div class="cssFilters__filter navigation__item__subItemWrapper">
+                            <input type="range" min="0" max="500" step="20" value="100" class="cssFilters__filter__value" id="saturate" autocomplete="off" data-default="100" data-unit="%">
+                            <label for="saturate" class="cssFilters__filter__name">saturate</label>
+                        </div>
+                        <div class="cssFilters__filter navigation__item__subItemWrapper">
+                            <input type="range" min="0" max="100" step="5" value="0" class="cssFilters__filter__value" id="sepia" autocomplete="off" data-default="0" data-unit="%">
+                            <label for="sepia" class="cssFilters__filter__name">sepia</label>
+                        </div>
+                        <button class="cssFilters__reset" id="resetCss">
+                            Reset effects
+                        </button>
+                    </div>
+                </li>
+                <li class="navigation__menu__item"><a href="https://jlopcunsdev.netlify.app" target="_blank">Author</a></li>
+            </ul> 
+        </nav>
         <div class="canvasContainer" id="canvasContainer">
-            <button id="imageDownloadButton" class="imageEditor__download">Download</button>
-            <button id="clearCanvas" class="imageEditor__clear">Clear</button>
+
             <div class="getFile" id="file">
                 <label for="fileGetter" class="getFile__label" tabindex="0" aria-label="choose a file" role="button">Choose an image</label>
                 <input type="file"  id="fileGetter" class="getFile__input" accept="image/*">
@@ -28,43 +78,6 @@
             </div>
             
             <div class="loader hidden" id="loader"></div>
-        </div>
-        <div class="cssFilters" id="cssFilters">
-            <div class="cssFilters__filter">
-                <input  type="range" min="0" max="20" step="2.5" value="1" class="cssFilters__filter__value" id="blur" autocomplete="off" data-default="0" data-unit="px">
-                <label for="blur"  class="cssFilters__filter__name">blur</label>
-            </div>
-            <div class="cssFilters__filter">
-                <input type="range" min="0" max="1" step=".1" value="1" class="cssFilters__filter__value" id="brightness" autocomplete="off" data-default="1" data-unit="">
-                <label for="brightness" class="cssFilters__filter__name">brightness</label>
-            </div>
-            <div class="cssFilters__filter">
-                <input type="range" min="0" max="200" step="10" value="100" class="cssFilters__filter__value" id="contrast" autocomplete="off" data-default="100" data-unit="%">
-                <label for="contrast" class="cssFilters__filter__name">contrast</label>
-            </div>
-            <div class="cssFilters__filter">
-                <input type="range" min="0" max="100" step="5" value="0" class="cssFilters__filter__value" id="grayscale" autocomplete="off" data-default="0" data-unit="%">
-                <label for="grayscale" class="cssFilters__filter__name">grayscale</label>
-            </div>
-            <div class="cssFilters__filter">
-                <input type="range" min="0" max="360" step="5" value="0" class="cssFilters__filter__value" id="hue-rotate" autocomplete="off" data-default="0" data-unit="deg">
-                <label for="hue-rotate" class="cssFilters__filter__name">hue-rotate</label>
-            </div>
-            <div class="cssFilters__filter">
-                <input type="range" min="0" max="100" step="5" value="0" class="cssFilters__filter__value" id="invert" autocomplete="off" data-default="0" data-unit="%">
-                <label for="invert" class="cssFilters__filter__name">invert</label>
-            </div>
-            <div class="cssFilters__filter">
-                <input type="range" min="0" max="500" step="20" value="100" class="cssFilters__filter__value" id="saturate" autocomplete="off" data-default="100" data-unit="%">
-                <label for="saturate" class="cssFilters__filter__name">saturate</label>
-            </div>
-            <div class="cssFilters__filter">
-                <input type="range" min="0" max="100" step="5" value="0" class="cssFilters__filter__value" id="sepia" autocomplete="off" data-default="0" data-unit="%">
-                <label for="sepia" class="cssFilters__filter__name">sepia</label>
-            </div>
-            <button class="cssFilters__reset" id="resetCss">
-                <img src="assets/arrows-circle.svg" alt="reset" class="cssFilters__reset__img">
-            </button>
         </div>
         <ul class="filterMenu" id="filterChoose">
             <li class="filterMenu__filter" tabindex="0" data-filter="glitch">

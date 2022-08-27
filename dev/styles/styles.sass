@@ -26,7 +26,9 @@ ul
 button
     background: none
     border: none
-
+a
+    text-decoration: none
+    color: inherit
 // UTILITIES
 %rounded
     border-radius: 10px
@@ -38,17 +40,17 @@ button
 body
     background-color: $interfaceBg
 .imageEditor
-    @include mix.grid($rows : 4.5fr 4fr 1.5fr)
+    @include mix.grid($rows : 1fr 7.5fr 1.5fr)
     width:100vw
     height:100vh
     font-family: Arial, Helvetica, sans-serif
     &__download
+        @include mix.highlightedBorder()
         position: absolute
         top: 1vmin
         right: 3vmin
         align-self: center
         text-align: center
-        border: 1px solid $highlighted
         padding: .5rem 1rem
         cursor: pointer
         text-decoration: none
@@ -59,15 +61,50 @@ body
         position: absolute
         top: 1vmin
         left: 3vmin
-        border: 1px solid $highlighted
         padding: .5rem 1rem
         color: $highlighted
-        
+
+.navigation
+    @include mix.highlightedBorder(5px)
+    &__menu
+        @include mix.flex($direction:row ,$wrap:wrap ,$justify:flex-start ,$align:center )
+        &__item
+            width:5rem
+            position: relative
+            padding: 1rem
+            border: 1px solid #000
+            text-align: center
+            color: $highlighted
+            cursor: default
+            &:hover > &__subItemWrapper
+                display: flex
+            &__text
+                margin:0
+            
+            &__subItemWrapper
+                @include mix.highlightedBorder()
+                @include mix.flex($direction:column ,$wrap:wrap ,$justify:center ,$align:flex-start)
+                gap: .5rem
+                background-color: $interfaceBg
+                width: 300%
+                display: none
+                position: absolute
+                top:100%
+                left:0
+                z-index:2
+            &__subItem
+                width:100%
+                height:50%
+                text-align: initial
+                padding:.5rem
+                color: $highlighted
+                
+
 .canvasContainer
-    position: relative
+    @include mix.highlightedBorder(5px)
     @include mix.flex(row,wrap,center,center)
-    padding: 2rem
-    border: 5px solid $highlighted
+    position: relative
+    padding: .5rem
     overflow: hidden
     background-color: var(--canvasContainerBg)
 
@@ -76,10 +113,10 @@ body
     @include mix.flex(column,wrap,center,center)
     @include mix.absoluteCentered()
     @include mix.button($width : 14rem,$padding : 1rem)
-    @include mix.neumorphism($background: $interfaceBg)
     @extend %rounded
     transform: translateX(-50%) translateY(-50%)
-    color:$highlighted
+    color:$interfaceBg
+    background-color: $highlighted
     z-index:1
     
     &__label
@@ -105,7 +142,7 @@ body
     position: relative
     width: 100%
     height: 100%
-    margin-top:1rem
+
     
 
 
@@ -137,11 +174,10 @@ body
 
     
 .filterMenu
-    background-color: $interfaceBg
+    @include mix.highlightedBorder(5px)
     @include mix.flex(row,nowrap,flex-start,center)
     width:100%
-    border : 5px solid $highlighted
-
+    background-color: $interfaceBg
     &__filter
         @include mix.center($X : true,$Y : true)
         flex-direction: column
@@ -174,27 +210,24 @@ body
             margin:0
 
 .cssFilters
+    @include mix.highlightedBorder(5px)
     @include mix.flex($direction:column ,$wrap:wrap ,$justify:flex-start ,$align:flex-start )
     position: relative
     width:100%
     padding: .5rem
-    border: 5px solid $highlighted
+    
     &__filter
         @include mix.center($Y : center)
         height: calc(90% / 8)
         &__name
             color: $highlighted
     &__reset
-        position: absolute
-        top:0
-        right:0
         align-self: center
-        width:2.5rem
-        height:2.5rem
-        margin-top:.2rem
+        margin:.5rem
+        padding:.5rem
         color: $highlighted
-        &__img
-            width:100%
+        border: 1px solid $highlighted
+
 
 // ANIMATIONS/KEYFRAMES
 @keyframes rotate
@@ -212,18 +245,14 @@ $numberOfFilters : 8
 
 @media screen and (min-width:640px)
     .imageEditor
-        grid-template-rows: 7.5fr 2.5fr
-        grid-template-columns: 3fr 7fr
+        grid-template-rows: .5fr 6.5fr 2.5fr
 
-    .filterMenu
-        grid-column: span 2
-    .cssFilters
-        order:-1
+
 
 
 @media screen and (min-height:680px)
     .imageEditor
-        grid-template-rows: 8.5fr 1.5fr
+        grid-template-rows: .5fr 8.5fr 1fr
 
 @media screen and (min-width:1000px)
     .cssFilters__reset

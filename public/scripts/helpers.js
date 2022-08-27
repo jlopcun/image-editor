@@ -163,12 +163,13 @@ const setFilter = (filter,imageData,canvas,callback = null)=>{
 }
 
 const setDifferentColors = (pixels,colorChanges,conditional,cb) =>{
+    const mainLayerData = application.mainLayer.getImageData()
     for(let i=0;i< pixels.length;i+=4){
         if(conditional()){
             pixels[i] += colorChanges[0]
             pixels[i+1] += colorChanges[1]
             pixels[i+2] += colorChanges[2]
-            pixels[i+3] += 255
+            pixels[i+3]  = mainLayerData.data[i + 3]
         }
         
         
@@ -177,12 +178,13 @@ const setDifferentColors = (pixels,colorChanges,conditional,cb) =>{
 }
 
 const setSameColor = (pixels,colorChanges,conditional,cb)=>{
+    const mainLayerData = application.mainLayer.getImageData()
     for(let i=0;i< pixels.length;i+=4){
         if(conditional()){
             pixels[i] += colorChanges
             pixels[i+1] += colorChanges
             pixels[i+2] += colorChanges
-            pixels[i+3] += 255
+            pixels[i+3] = mainLayerData.data[i+3]
         }
         
     }
@@ -213,7 +215,7 @@ const filters = {
                 imageData.data[i] = mainLayer.data[newColor]
                 imageData.data[i +1] = mainLayer.data[newColor+1]
                 imageData.data[i+2] = mainLayer.data[newColor+2]
-                imageData.data[i+3] = 255
+                imageData.data[i+3] = mainLayer.data[i+3]
             }
         }
         updateImageData(imageData,canvas)
