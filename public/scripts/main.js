@@ -75,6 +75,15 @@ const app = function(canvas,file){
         resetCssInputs()
         show(I('file'))
     },I('clearCanvas'))
+
+    on('change',(e)=>{
+        setRoot('--mainColor',getInputValue(e.target))
+    },I('mainColorPicker'))
+
+
+    on('click',()=>{
+        setRoot('--mainColor','#5fb')
+    },I('resetSettings'))
 }
 
 

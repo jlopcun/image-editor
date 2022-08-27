@@ -40,7 +40,7 @@ const changeTextContent = (el,text) =>{
 const hide = el => el.classList.add('hidden')
 const show = el => el.classList.remove('hidden')
 
-const getInputValue = input => `${input.value || input.textContent}${input.dataset.unit}`
+const getInputValue = input => `${input.value || input.textContent}${input.dataset.unit || ""}`
 
 const getId = el => el.id
 

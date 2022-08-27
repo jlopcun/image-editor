@@ -57,10 +57,22 @@
                             <input type="range" min="0" max="100" step="5" value="0" class="cssFilters__filter__value" id="sepia" autocomplete="off" data-default="0" data-unit="%">
                             <label for="sepia" class="cssFilters__filter__name">sepia</label>
                         </div>
-                        <button class="cssFilters__reset" id="resetCss">
+                        <button class="resetBtn" id="resetCss">
                             Reset effects
                         </button>
                     </div>
+                </li>
+                <li class="navigation__menu__item">
+                    <p class="navigation__menu__item__text">Settings</p>
+                    <div class="navigation__menu__item__subItemWrapper">
+                        <label for="mainColorPicker" class="navigation__menu__item__subItem">Interface color</label>
+                        
+                        <input type="color" id="mainColorPicker" hidden>
+                        <button class="resetBtn" id="resetSettings">
+                            Reset settings
+                        </button>
+                    </div>
+                    
                 </li>
                 <li class="navigation__menu__item"><a href="https://jlopcunsdev.netlify.app" target="_blank">Author</a></li>
             </ul> 

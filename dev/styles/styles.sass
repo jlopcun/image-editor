@@ -8,6 +8,7 @@ $highlighted:#5fb
     --canvasContainerBg: #{$interfaceBg}
     --errBg : #ff2226
     --fulfilledBg: #{$highlighted}
+    --mainColor : #{$highlighted}
 
 *,*::after,*::before
     box-sizing: border-box
@@ -45,7 +46,7 @@ body
     height:100vh
     font-family: Arial, Helvetica, sans-serif
     &__download
-        @include mix.highlightedBorder()
+        border: 1px solid var(--mainColor)
         position: absolute
         top: 1vmin
         right: 3vmin
@@ -54,7 +55,7 @@ body
         padding: .5rem 1rem
         cursor: pointer
         text-decoration: none
-        color : $highlighted
+        color : var(--mainColor)
         &::selection
             display: none
     &__clear
@@ -62,19 +63,19 @@ body
         top: 1vmin
         left: 3vmin
         padding: .5rem 1rem
-        color: $highlighted
+        color: var(--mainColor)
 
 .navigation
-    @include mix.highlightedBorder(5px)
+    border: 5px solid var(--mainColor)
     &__menu
         @include mix.flex($direction:row ,$wrap:wrap ,$justify:flex-start ,$align:center )
         &__item
-            width:5rem
+            width:7rem
             position: relative
             padding: 1rem
             border: 1px solid #000
             text-align: center
-            color: $highlighted
+            color: var(--mainColor)
             cursor: default
             &:hover > &__subItemWrapper
                 display: flex
@@ -82,7 +83,7 @@ body
                 margin:0
             
             &__subItemWrapper
-                @include mix.highlightedBorder()
+                border: 1px solid var(--mainColor)
                 @include mix.flex($direction:column ,$wrap:wrap ,$justify:center ,$align:flex-start)
                 gap: .5rem
                 background-color: $interfaceBg
@@ -93,15 +94,13 @@ body
                 left:0
                 z-index:2
             &__subItem
-                width:100%
-                height:50%
                 text-align: initial
                 padding:.5rem
-                color: $highlighted
-                
+                color: var(--mainColor)
+
 
 .canvasContainer
-    @include mix.highlightedBorder(5px)
+    border: 5px solid var(--mainColor)
     @include mix.flex(row,wrap,center,center)
     position: relative
     padding: .5rem
@@ -116,7 +115,7 @@ body
     @extend %rounded
     transform: translateX(-50%) translateY(-50%)
     color:$interfaceBg
-    background-color: $highlighted
+    background-color: var(--mainColor)
     z-index:1
     
     &__label
@@ -167,14 +166,14 @@ body
     width:5rem
     height:5rem
     border: 5px solid #fff
-    border-right-color: $highlighted
+    border-right-color: var(--mainColor)
     border-radius: 50%
     animation: rotate 1s infinite ease-in-out
 
 
     
 .filterMenu
-    @include mix.highlightedBorder(5px)
+    border: 5px solid var(--mainColor)
     @include mix.flex(row,nowrap,flex-start,center)
     width:100%
     background-color: $interfaceBg
@@ -182,7 +181,7 @@ body
         @include mix.center($X : true,$Y : true)
         flex-direction: column
         $font-size:1em
-        $border:5px solid #fff
+        $border:5px solid var(--mainColor)
         background-color: $interfaceBg
         min-width:5rem
         height:100%
@@ -200,8 +199,8 @@ body
         &:hover
             font-size: $font-size * .95
             opacity: .5
-            color: $highlighted
-            border-color:$highlighted
+            color: var(--mainColor)
+            border-color: var(--mainColor)
         &__thumb
             @extend %rounded
             width: 3rem
@@ -210,7 +209,7 @@ body
             margin:0
 
 .cssFilters
-    @include mix.highlightedBorder(5px)
+    border: 5px solid var(--mainColor)
     @include mix.flex($direction:column ,$wrap:wrap ,$justify:flex-start ,$align:flex-start )
     position: relative
     width:100%
@@ -220,13 +219,13 @@ body
         @include mix.center($Y : center)
         height: calc(90% / 8)
         &__name
-            color: $highlighted
-    &__reset
-        align-self: center
-        margin:.5rem
-        padding:.5rem
-        color: $highlighted
-        border: 1px solid $highlighted
+            color: var(--mainColor)
+.resetBtn
+    align-self: center
+    margin:.5rem
+    padding:.5rem
+    color: var(--mainColor)
+    border: 1px solid var(--mainColor)
 
 
 // ANIMATIONS/KEYFRAMES
