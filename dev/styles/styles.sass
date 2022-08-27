@@ -12,12 +12,15 @@ $highlighted:#5fb
 
 *,*::after,*::before
     box-sizing: border-box
-
+html,body
+    position: relative
+    overflow-x: hidden
 body
+    position: relative
     width: 100vw
     min-height:100vh
     margin: 0
-    overflow-x: hidden
+    overflow: hidden
 li
     list-style: none
 ul
@@ -71,8 +74,7 @@ body
         @include mix.flex($direction:row ,$wrap:wrap ,$justify:flex-start ,$align:center )
         &__item
             $numberOfItems : 4
-            width:7rem
-            max-width: calc(100% / $numberOfItems)
+            width: min(7rem,calc(100% / $numberOfItems))
             position: relative
             padding: 1rem
             border: 1px solid #000
