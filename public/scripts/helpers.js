@@ -8,8 +8,13 @@ const attr = R.curry((attribute,value,element)=>{
     return element
 })
 
-const append = (el,node) =>{
+const removeAllChildren = (el) =>{
+    el.textContent = ""
+}
+
+const append = (el,node,rtr) =>{
     el.appendChild(node)
+    if(rtr) return el
 }
 
 const addClass = (el,...className) =>{
@@ -21,6 +26,7 @@ const image =(src,id)=>{
         attr('src',src)
     )(id?I(id):elem('img'))
 }
+
 const on = function(eventType,cb,element){
     element.addEventListener(eventType,cb)
 }
@@ -53,6 +59,32 @@ const objKeyVal = (obj,eqStart,eqEnd = "",separator=",") => objKeys(obj).map((se
 function hideLoader(){
     hide(I('loader'))
 }
+
+
+
+//SUBELEMENTS RELATED METHODS AND OBJECTS
+
+const setSubElement = (type,content,callback = null) =>{
+    const subElement = elem('div')
+    addClass(subElement,'subElementsLayer__subElement')
+    
+    type==='img'
+    ?append(application.subElementsLayer,dragNRes(append(subElement,attr('draggable',false,image(content)),true),application.subElementsLayer,true))
+    :""
+    
+    const child = subElement.querySelector('img')
+    on('load',()=>{
+        subElement.style = `width:${child.width}px;height:${child.height}px`
+        if(callback) callback()
+    },child)
+
+    // append(application.subElementsLayer,append(subElement,dragNRes(attr('draggable','false',image(content)),application.subElementsLayer,true),true))
+}
+
+
+
+
+
 // CANVAS RELATED METHODS AND OBJECTS
 
 
@@ -67,15 +99,24 @@ const clearCanvas = canvas =>{
 }
 
 
-const drawImage = (canvas,HTMLimage) => canvas.ctx().drawImage(HTMLimage,0,0,HTMLimage.width,HTMLimage.height)
+const drawImage = (canvas,HTMLimage,{x=0,y=0,w=null,h=null}) =>{
+
+    canvas.ctx().drawImage(HTMLimage,Math.round(x),Math.round(y),w ??HTMLimage.width,h ??HTMLimage.height)
+}
 
 const updateImageData = (imageData,canvas) =>{
     canvas.ctx().putImageData(imageData,0,0)
-    // drawImage(canvas,canvas.ref)
+    // drawImage(canvas,canvas.ref,{})
 }
 const download = (callback)=>{
     const a = elem('a')
     const downloadCanvas = createCanvasElement(application.mainLayer.ref,application.filterLayer.ref)
+    toArray(application.subElementsLayer.children).forEach(el=>{
+        const img = el.querySelector('img'),
+        XincreaseIndex = application.mainLayer.getWidth() / application.mainLayer.ref.clientWidth,
+        YincreaseIndex = application.mainLayer.getHeight() / application.mainLayer.ref.clientHeight
+        drawImage(downloadCanvas,img,{x:Number(el.style.left.slice(0,-2)) * XincreaseIndex,y:Number(el.style.top.slice(0,-2)) * YincreaseIndex,w:img.width * XincreaseIndex,h:img.height*YincreaseIndex})
+    })
     a.href = downloadCanvas.ref.toDataURL()
     attr('download','jl_edited_image',a)
     a.click()
@@ -85,13 +126,25 @@ const download = (callback)=>{
 const createCanvasElement = (...image) =>{
     const canvas = newCanvas(document.createElement('canvas')),
     img = I('imageToEdit')
-    console.log(image[0])
     equalSizes(image[0],canvas.ref);
-    [...image].forEach(img=>drawImage(canvas,img))
+    [...image].forEach(img=>drawImage(canvas,img,{}))
     return canvas
 }
 // IMAGE HELPER METHODS
 
+const drawRotatedImage = (canvas,img,width,height,x,y,deg) =>{
+    const ctx = canvas.ctx()
+    ctx.save()
+    ctx.translate(x + width/2,y + height/2)
+    ctx.rotate(deg * Math.PI / 180)
+    ctx.drawImage(img,width/2 * (-1),height/2 * (-1),width,height,{})
+    ctx.restore()
+
+}
+
+const gradientTopToBottom = (canvas,gradient) =>{
+    drawRotatedImage(canvas,gradient,canvas.height,canvas.width,canvas.width/2-canvas.height/2,canvas.height/2-canv.width/2,90)
+}
 
 
 const equalSizes = (sizeGetter,sizePut) =>{
@@ -105,13 +158,19 @@ const setImage = function(file,canvas,callback){
         show(I('loader'))
         const img = image(URL.createObjectURL(file),'imageToEdit')
         on('load',()=>{
-
+                
                 equalSizes(img,canvas.ref)
                 equalSizes(img,application.filterLayer.ref)
-                drawImage(canvas,img)
 
+                setRoot('--layerWidth',getComputedStyle(application.mainLayer.ref).width)
+                setRoot('--layerHeight',getComputedStyle(application.mainLayer.ref).height)
+                drawImage(canvas,img,{})
+
+                I('addImage__label').removeAttribute('data-disabled')
+                I('addImage').removeAttribute('disabled')
+                
                 callback()
-            
+              
         },img)
         
 }
@@ -137,7 +196,7 @@ const updateCssFilters = (canvasObj,imageData,callback = null) =>{
         const vals = objValues(cssFilterSettings)
         canvasObj.ctx().filter = `blur(${vals[0]}) brightness(${vals[1]}) contrast(${vals[2]}) grayscale(${vals[3]}) hue-rotate(${vals[4]}) invert(${vals[5]}) saturate(${vals[6]}) sepia(${vals[7]})`
         
-        drawImage(canvasObj,I('imageToEdit'))
+        drawImage(canvasObj,I('imageToEdit'),{})
         canvasObj.ctx().filter = "none"
 
 

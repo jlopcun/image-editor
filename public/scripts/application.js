@@ -13,5 +13,6 @@ const newCanvas = (canvas)=>{
 
 const application = {
     mainLayer:newCanvas(document.getElementById('mainLayer')),
-    filterLayer:newCanvas(document.getElementById('filterLayer'))
+    filterLayer:newCanvas(document.getElementById('filterLayer')),
+    subElementsLayer:document.getElementById('subElementsLayer')
 }

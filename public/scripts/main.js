@@ -64,7 +64,7 @@ const app = function(canvas,file){
 
     on('click',()=>{
         clearCanvas(canvas)
-        drawImage(canvas,I('imageToEdit'))
+        drawImage(canvas,I('imageToEdit'),{})
         resetCssInputs()
     },I('resetCss'))
 
@@ -73,6 +73,9 @@ const app = function(canvas,file){
         clearCanvas(application.filterLayer)
         clearCanvas(application.mainLayer)
         resetCssInputs()
+        I('addImage').setAttribute('disabled',"")
+        I('addImage__label').setAttribute('data-disabled',"")
+        removeAllChildren(application.subElementsLayer)
         show(I('file'))
     },I('clearCanvas'))
 
@@ -84,6 +87,17 @@ const app = function(canvas,file){
     on('click',()=>{
         setRoot('--mainColor','#5fb')
     },I('resetSettings'))
+
+    on('resize',()=>{
+        setRoot('--layerWidth',getComputedStyle(application.mainLayer.ref).width)
+        setRoot('--layerHeight',getComputedStyle(application.mainLayer.ref).height)
+    },window)
+
+    on('change',(e)=>{
+        show(I('loader'))
+        const fileLink = URL.createObjectURL(e.target.files[0])
+        setSubElement('img',fileLink,hideLoader)
+    },I('addImage'))
 }
 
 

@@ -18,8 +18,10 @@
                 <li class="navigation__menu__item">
                     <p class="navigation__menu__item__text">File</p>
                     <div class="navigation__menu__item__subItemWrapper">
+                        <label for="addImage" class="navigation__menu__item__subItem" data-disabled id="addImage__label" >add image</label>
                         <button id="clearCanvas" class="navigation__menu__item__subItem">Clear canvas</button>
                         <button id="imageDownloadButton" class="navigation__menu__item__subItem">Save image</button>
+                        <input type="file" class="navigation__menu__item__subItem addImage" disabled id="addImage" hidden="" accept="images/*" multiple="false">
                     </div>
                 </li>
                 <li class="navigation__menu__item">
@@ -87,6 +89,7 @@
             <div class="layers" id="layers">
                 <canvas class="mainLayer" id="mainLayer"></canvas>
                 <canvas class="filterLayer" id="filterLayer"></canvas>
+                <div class="subElementsLayer" id="subElementsLayer"></div>
             </div>
             
             <div class="loader hidden" id="loader"></div>
@@ -112,6 +115,7 @@
     </article>
 
     <script src="//cdn.jsdelivr.net/npm/ramda@latest/dist/ramda.min.js"></script>
+    <script src="public/scripts/dragNRes.js"></script>
     <script src="public/scripts/application.js"></script>
     <script src="public/scripts/helpers.js"></script>
     <script src="public/scripts/main.js"></script>
