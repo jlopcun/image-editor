@@ -4,7 +4,7 @@
 
 const dragNRes = (el,parent,rtr) =>{
     el.addEventListener('mousedown',(e)=>{
-
+        
         //this condicional is to avoid dragging element when resizing the element
         if(!(e.clientX - Number(el.style.left.slice(0,-2)) <el.clientWidth - 10) && !(e.clientY - Number(el.style.top.slice(0,-2)) < el.clientHeight - 10)) return
         el.addEventListener('mousemove',function drag(e){

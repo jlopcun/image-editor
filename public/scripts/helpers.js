@@ -1,6 +1,8 @@
 'use strict'
 // GENERAL HELPERS
 const I = id => document.getElementById(id)
+const getQuery = (element,query) => element.querySelector(query)
+const getAllQuery = (element,query) => element.querySelectorAll(query)
 const elem = tag => document.createElement(tag)
 const randomNum = (min,max)=> Math.floor(Math.random() * max ) + min
 const attr = R.curry((attribute,value,element)=>{
@@ -28,7 +30,9 @@ const image =(src,id)=>{
 }
 
 const on = function(eventType,cb,element){
-    element.addEventListener(eventType,cb)
+    NodeList.prototype.isPrototypeOf(element) || HTMLCollection.prototype.isPrototypeOf(element)
+    ?toArray(element).forEach(el=>el.addEventListener(eventType,cb))
+    :element.addEventListener(eventType,cb)
 }
 
 const setRoot = (varName,varValue) =>{
@@ -68,10 +72,10 @@ const setSubElement = (type,content,callback = null) =>{
     const subElement = elem('div')
     addClass(subElement,'subElementsLayer__subElement')
     
-    type==='img'
-    ?append(application.subElementsLayer,dragNRes(append(subElement,attr('draggable',false,image(content)),true),application.subElementsLayer,true))
-    :""
     
+    append(application.subElementsLayer,dragNRes(append(subElement,attr('class','subElementsLayer__subElement__image',attr('draggable',false,image(content)),true),true),application.subElementsLayer,true))
+    append(subElement,attr('class','subElementsLayer__subElement__del',image('../assets/red-bin.svg')))
+    append(subElement,attr('class','subElementsLayer__subElement__res',elem('div')))
     const child = subElement.querySelector('img')
     on('load',()=>{
         subElement.style = `width:${child.width}px;height:${child.height}px`
@@ -161,6 +165,7 @@ const setImage = function(file,canvas,callback){
                 
                 equalSizes(img,canvas.ref)
                 equalSizes(img,application.filterLayer.ref)
+                equalSizes(img,application.drawLayer.ref)
 
                 setRoot('--layerWidth',getComputedStyle(application.mainLayer.ref).width)
                 setRoot('--layerHeight',getComputedStyle(application.mainLayer.ref).height)

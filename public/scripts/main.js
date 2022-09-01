@@ -98,6 +98,15 @@ const app = function(canvas,file){
         const fileLink = URL.createObjectURL(e.target.files[0])
         setSubElement('img',fileLink,hideLoader)
     },I('addImage'))
+
+    on('click',(e)=>{
+        const actions = {
+            'subElementsLayer__subElement__del':()=>{
+                application.subElementsLayer.removeChild(e.target.closest('.subElementsLayer__subElement'))
+            }
+        }
+        if(actions[e.target.classList[0]]) actions[e.target.classList[0]]()
+    },I('subElementsLayer'))
 }
 
 
