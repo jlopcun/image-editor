@@ -95,6 +95,15 @@
             
             <div class="loader hidden" id="loader"></div>
         </div>
+        <div class="drawContainer" id="drawContainer">
+            <img class="drawContainer__img" src="assets/pencil.svg" alt="pencil" id="toggleDraw">
+            <div class="drawContainer__weight">
+                <input type="range" class="drawContainer__weight__range" id="pencilWeight" min="1" max="25" data-default="5" autocomplete="off">
+            </div>
+            <label for="pencilColor" class="drawContainer__color"></label>
+            <input type="color" class="drawContainer__color" id="pencilColor" hidden autocomplete="off">
+            <img src="../assets/eraser.svg" alt="eraser" class="drawContainer__img" id="eraser"> 
+        </div>
         <ul class="filterMenu" id="filterChoose">
             <li class="filterMenu__filter" tabindex="0" data-filter="glitch">
                 <img class="filterMenu__filter__thumb" alt="glitch" src="assets/glitch_thumb.png">

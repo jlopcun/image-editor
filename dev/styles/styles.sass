@@ -11,7 +11,7 @@ $highlighted:#5fb
     --mainColor : #{$highlighted}
     --layerWidth : 0px
     --layerHeight : 0px
-
+    --pencilColor:#000
 *,*::after,*::before
     box-sizing: border-box
 html,body
@@ -46,7 +46,7 @@ a
 body
     background-color: $interfaceBg
 .imageEditor
-    @include mix.grid($rows : 1fr 7.5fr 1.5fr)
+    @include mix.grid($rows : 1fr 6fr 1fr 1.5fr)
     width:100vw
     height:100vh
     font-family: Arial, Helvetica, sans-serif
@@ -212,7 +212,30 @@ body
     animation: rotate 1s infinite ease-in-out
 
 
+
+.drawContainer
+    @include mix.flex($direction:row ,$wrap:wrap ,$justify:space-around ,$align:center )
     
+    width:100%
+    &__img
+        width:2.5rem
+    &__weight
+        background-color: pale
+        position: relative
+        &::after
+            content:"weight"
+            position: absolute
+            top:-10px
+            right:0
+            display: inline-block
+            color: var(--mainColor)
+            z-index:9
+    &__color
+        background-color: var(--pencilColor)
+        width:2.5rem
+        height:2.5rem
+
+
 .filterMenu
     border: 5px solid var(--mainColor)
     @include mix.flex(row,nowrap,flex-start,center)
@@ -285,8 +308,25 @@ $numberOfFilters : 8
 
 @media screen and (min-width:640px)
     .imageEditor
-        grid-template-rows: .5fr 6.5fr 2.5fr
-
+        grid-template-rows: 1fr 6.5fr 2.5fr
+        grid-template-columns: .5fr 9.5fr
+        grid-template-areas:"nav nav nav nav" "draw canvas canvas canvas" "filter filter filter filter"
+    .navigation
+        grid-area: nav
+    .canvasContainer
+        grid-area: canvas
+    .filterMenu
+        grid-area: filter
+    .drawContainer
+        grid-area: draw
+        flex-direction: column
+        align-items: center
+        @media screen and (min-height:640px)
+            .drawContainer__weight::after
+                right:1rem
+            .drawContainer__weight__range
+                transform: rotate(-90deg)
+    
 
 
 

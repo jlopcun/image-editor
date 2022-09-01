@@ -72,6 +72,7 @@ const app = function(canvas,file){
         I('imageToEdit').src = ""
         clearCanvas(application.filterLayer)
         clearCanvas(application.mainLayer)
+        clearCanvas(application.drawLayer)
         resetCssInputs()
         I('addImage').setAttribute('disabled',"")
         I('addImage__label').setAttribute('data-disabled',"")
@@ -107,6 +108,51 @@ const app = function(canvas,file){
         }
         if(actions[e.target.classList[0]]) actions[e.target.classList[0]]()
     },I('subElementsLayer'))
+
+    on('click',(e)=>{
+        const actions = {
+            'toggleDraw':()=> toggleClass(application.drawLayer.ref,'noDraw'),
+            'eraser':()=>{
+                clearCanvas(application.drawLayer)
+            }
+        }
+        if(actions[e.target.id]) actions[e.target.id]()
+    },I('drawContainer'))
+
+    on('change',(e)=>{
+        const actions = {
+            'pencilColor':()=>{
+                setRoot('--pencilColor',getInputValue(e.target))
+            }
+        }
+        if(actions[e.target.id]) actions[e.target.id]()
+    },I('drawContainer'))
+
+
+    on('mousedown',function down(){
+        startPath(application.drawLayer)
+        on('mousemove',function move(e){
+            const x = e.clientX - application.drawLayer.ref.getBoundingClientRect().left,
+            y = e.clientY - application.drawLayer.ref.getBoundingClientRect().top
+            lineInPos(application.drawLayer,x,y)
+            on('mouseup',()=>{
+                application.drawLayer.ctx().closePath()
+                application.drawLayer.ref.removeEventListener('mousemove',move)
+            },application.drawLayer.ref)
+            on('mouseleave',()=>{
+                application.drawLayer.ctx().closePath()
+                application.drawLayer.ref.removeEventListener('mousemove',move)
+            },application.drawLayer.ref)
+        },application.drawLayer.ref)
+    },application.drawLayer.ref)
+    on('touchstart',()=>{
+        startPath(application.drawLayer)
+    },application.drawLayer.ref)
+    on('touchmove',(e)=>{
+        const x = e.touches[0].clientX - application.drawLayer.ref.getBoundingClientRect().left,
+        y = e.touches[0].clientY - application.drawLayer.ref.getBoundingClientRect().top
+        lineInPos(application.drawLayer,x,y)
+    },application.drawLayer.ref)
 }
 
 

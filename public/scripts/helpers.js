@@ -9,11 +9,15 @@ const attr = R.curry((attribute,value,element)=>{
     element.setAttribute(attribute,value)
     return element
 })
-
+const toggleClass = (el,className) =>{
+    el.classList.toggle(className)
+}
 const removeAllChildren = (el) =>{
     el.textContent = ""
 }
-
+const removeClass = (el,className) =>{
+    el.classList.remove(className)
+}
 const append = (el,node,rtr) =>{
     el.appendChild(node)
     if(rtr) return el
@@ -121,6 +125,7 @@ const download = (callback)=>{
         YincreaseIndex = application.mainLayer.getHeight() / application.mainLayer.ref.clientHeight
         drawImage(downloadCanvas,img,{x:Number(el.style.left.slice(0,-2)) * XincreaseIndex,y:Number(el.style.top.slice(0,-2)) * YincreaseIndex,w:img.width * XincreaseIndex,h:img.height*YincreaseIndex})
     })
+    drawImage(downloadCanvas,application.drawLayer.ref,{})
     a.href = downloadCanvas.ref.toDataURL()
     attr('download','jl_edited_image',a)
     a.click()
@@ -179,6 +184,20 @@ const setImage = function(file,canvas,callback){
         },img)
         
 }
+
+const startPath = (canvas)=>{
+    canvas.ctx().beginPath()
+    canvas.ctx().strokeStyle = getInputValue(I('pencilColor'))
+    canvas.ctx().lineWidth = getInputValue(I('pencilWeight'))
+}
+
+const lineInPos = (canvas,x,y) =>{
+    canvas.ctx().lineTo(x,y)
+    canvas.ctx().stroke()
+}
+
+    
+
 
 
 
