@@ -171,12 +171,14 @@ body
     width: var(--layerWidth)
     height: var(--layerHeight)
     overflow: hidden
+    pointer-events: none
     &__subElement
         position: absolute
         top:0
         left:0
         resize: both
         overflow: hidden
+        pointer-events: initial
         user-select: none
         &__image
             width:100%

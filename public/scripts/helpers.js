@@ -38,7 +38,7 @@ const on = function(eventType,cb,element){
     ?toArray(element).forEach(el=>el.addEventListener(eventType,cb))
     :element.addEventListener(eventType,cb)
 }
-
+const removeEventListener = (element,type,fn) => element.removeEventListener(type,fn)
 const setRoot = (varName,varValue) =>{
     document.documentElement.style.setProperty(varName,varValue)
 }
@@ -95,7 +95,18 @@ const setSubElement = (type,content,callback = null) =>{
 
 // CANVAS RELATED METHODS AND OBJECTS
 
+const startPath = (canvas)=>{
+    canvas.ctx().beginPath()
+    canvas.ctx().strokeStyle = getInputValue(I('pencilColor'))
+    canvas.ctx().lineWidth = getInputValue(I('pencilWeight'))
+}
 
+const lineInPos = (canvas,x,y) =>{
+    canvas.ctx().lineTo(x * canvas.XincreaseIndex(),y * canvas.YincreaseIndex())
+    canvas.ctx().stroke()
+}
+
+const closePath = (canvas) => canvas.ctx().closePath()
 
 const isCanvasEmpty = canvasObj => canvasObj.getImageData().data.reduce((prev,act)=>prev+act) === 0
 
@@ -118,14 +129,13 @@ const updateImageData = (imageData,canvas) =>{
 }
 const download = (callback)=>{
     const a = elem('a')
-    const downloadCanvas = createCanvasElement(application.mainLayer.ref,application.filterLayer.ref)
+    const downloadCanvas = createCanvasElement(application.mainLayer.ref,application.filterLayer.ref,application.drawLayer.ref)
     toArray(application.subElementsLayer.children).forEach(el=>{
         const img = el.querySelector('img'),
-        XincreaseIndex = application.mainLayer.getWidth() / application.mainLayer.ref.clientWidth,
-        YincreaseIndex = application.mainLayer.getHeight() / application.mainLayer.ref.clientHeight
+        XincreaseIndex = application.mainLayer.XincreaseIndex(),
+        YincreaseIndex = application.mainLayer.YincreaseIndex()
         drawImage(downloadCanvas,img,{x:Number(el.style.left.slice(0,-2)) * XincreaseIndex,y:Number(el.style.top.slice(0,-2)) * YincreaseIndex,w:img.width * XincreaseIndex,h:img.height*YincreaseIndex})
     })
-    drawImage(downloadCanvas,application.drawLayer.ref,{})
     a.href = downloadCanvas.ref.toDataURL()
     attr('download','jl_edited_image',a)
     a.click()
@@ -185,16 +195,6 @@ const setImage = function(file,canvas,callback){
         
 }
 
-const startPath = (canvas)=>{
-    canvas.ctx().beginPath()
-    canvas.ctx().strokeStyle = getInputValue(I('pencilColor'))
-    canvas.ctx().lineWidth = getInputValue(I('pencilWeight'))
-}
-
-const lineInPos = (canvas,x,y) =>{
-    canvas.ctx().lineTo(x,y)
-    canvas.ctx().stroke()
-}
 
     
 

@@ -6,7 +6,9 @@ const newCanvas = (canvas)=>{
         getHeight:()=>canvas.height,
         getImageData:()=>canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height),
         X:(pageX)=>parseInt(Math.abs(pageX - canvas.getBoundingClientRect().left)),
-        Y:(pageY)=>parseInt(Math.abs(pageY - canvas.getBoundingClientRect().top))
+        Y:(pageY)=>parseInt(Math.abs(pageY - canvas.getBoundingClientRect().top)),
+        XincreaseIndex:()=>canvas.width / canvas.clientWidth,
+        YincreaseIndex:()=>canvas.height / canvas.clientHeight
     }
 }
 

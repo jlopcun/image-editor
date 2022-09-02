@@ -129,22 +129,25 @@ const app = function(canvas,file){
     },I('drawContainer'))
 
 
-    on('mousedown',function down(){
+    on('mousedown',function down(e){
         startPath(application.drawLayer)
+  
         on('mousemove',function move(e){
             const x = e.clientX - application.drawLayer.ref.getBoundingClientRect().left,
             y = e.clientY - application.drawLayer.ref.getBoundingClientRect().top
             lineInPos(application.drawLayer,x,y)
             on('mouseup',()=>{
-                application.drawLayer.ctx().closePath()
-                application.drawLayer.ref.removeEventListener('mousemove',move)
+                closePath(application.drawLayer)
+                removeEventListener(application.drawLayer.ref,'mousemove',move)
             },application.drawLayer.ref)
             on('mouseleave',()=>{
-                application.drawLayer.ctx().closePath()
-                application.drawLayer.ref.removeEventListener('mousemove',move)
+                closePath(application.drawLayer)
+                removeEventListener(application.drawLayer.ref,'mousemove',move)
             },application.drawLayer.ref)
         },application.drawLayer.ref)
     },application.drawLayer.ref)
+
+
     on('touchstart',()=>{
         startPath(application.drawLayer)
     },application.drawLayer.ref)
@@ -153,6 +156,7 @@ const app = function(canvas,file){
         y = e.touches[0].clientY - application.drawLayer.ref.getBoundingClientRect().top
         lineInPos(application.drawLayer,x,y)
     },application.drawLayer.ref)
+
 }
 
 
