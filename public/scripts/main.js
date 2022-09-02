@@ -73,6 +73,7 @@ const app = function(canvas,file){
         clearCanvas(application.filterLayer)
         clearCanvas(application.mainLayer)
         clearCanvas(application.drawLayer)
+        addClass(application.drawLayer.ref,'noDraw')
         resetCssInputs()
         I('addImage').setAttribute('disabled',"")
         I('addImage__label').setAttribute('data-disabled',"")
@@ -111,7 +112,7 @@ const app = function(canvas,file){
 
     on('click',(e)=>{
         const actions = {
-            'toggleDraw':()=> toggleClass(application.drawLayer.ref,'noDraw'),
+            'toggleDraw':()=> (!isCanvasEmpty(application.mainLayer))?toggleClass(application.drawLayer.ref,'noDraw'):"",
             'eraser':()=>{
                 clearCanvas(application.drawLayer)
             }
